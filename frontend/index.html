@@ -48,6 +48,7 @@
             display: flex;
             align-items: center;
             gap: 10px; /* Gap between icon and text */
+            text-decoration: none; /* Ensure no underline */
         }
         
         .navbar-brand span { color: var(--primary); }
@@ -69,6 +70,7 @@
             align-items: center;
             justify-content: center;
             height: 44px; /* Explicit height to match other elements */
+            text-decoration: none;
         }
         
         .btn-outline-custom:hover {
@@ -153,12 +155,14 @@
             align-items: center;
             justify-content: center;
             width: 100%;
+            text-decoration: none;
         }
 
         .btn-hero:hover {
             background: var(--primary-hover);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+            color: white;
         }
 
         /* Hero Image */
@@ -345,7 +349,8 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <!-- LINK UPDATED: Connects to index.html -->
+            <a class="navbar-brand" href="index.html">
                 <i class="fas fa-bus-alt text-danger"></i> SmartBus
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -353,8 +358,10 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <div class="d-flex gap-3 mt-3 mt-lg-0 align-items-center">
-                    <a href="#" class="btn btn-outline-custom">Login</a>
-                    <a href="#" class="btn btn-hero px-4" style="width: auto;">Sign Up</a>
+                    <!-- LINK UPDATED: Connects to login.html -->
+                    <a href="login.html" class="btn btn-outline-custom">Login</a>
+                    <!-- LINK UPDATED: Connects to register.html -->
+                    <a href="register.html" class="btn btn-hero px-4" style="width: auto;">Sign Up</a>
                 </div>
             </div>
         </div>
