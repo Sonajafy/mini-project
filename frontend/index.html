@@ -9,57 +9,68 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary: #E53935;
-            --primary-light: #ff7e79;
-            --accent: #F5F5F7;
-            --text-dark: #1B1B1E;
-            --text-muted: #6c757d;
-            --glass: rgba(255, 255, 255, 0.7);
-            --shadow-sm: 0 4px 6px rgba(0,0,0,0.04);
-            --shadow-lg: 0 20px 60px rgba(0,0,0,0.08);
-            --radius: 20px;
+            --primary: #E53935;       /* Vibrant Red */
+            --primary-dark: #B71C1C;  /* Darker Red for hover */
+            --primary-light: #FFEBEE; /* Very light red for backgrounds */
+            --accent: #F8F9FC;        /* Soft blue-grey background */
+            --text-dark: #1E293B;     /* Slate 800 */
+            --text-muted: #64748B;    /* Slate 500 */
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif; /* Modern geometric sans */
             background: var(--accent);
             color: var(--text-dark);
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
         /* --- Animations --- */
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-12px); }
             100% { transform: translateY(0px); }
         }
         
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
         }
 
         @keyframes driveBus {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% { left: -5%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 105%; opacity: 0; }
         }
 
-        @keyframes pulseRing {
-            0% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(229, 57, 53, 0); }
+        @keyframes pulseSoft {
+            0% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.2); }
+            70% { box-shadow: 0 0 0 10px rgba(229, 57, 53, 0); }
             100% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0); }
         }
 
+        /* Staggered Animation Utility */
         .animate-on-scroll {
             opacity: 0;
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform: translateY(30px);
+            transition: var(--transition);
         }
 
         .animate-on-scroll.visible {
@@ -69,21 +80,23 @@
 
         /* --- Navbar --- */
         .navbar {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
             padding: 1rem 0;
         }
+        
         .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            padding: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-sm);
+            padding: 0.7rem 0;
         }
 
         .navbar-brand {
             font-weight: 800;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: var(--text-dark);
             display: flex;
             align-items: center;
@@ -92,170 +105,298 @@
             letter-spacing: -0.5px;
         }
         
-        .navbar-brand i { font-size: 1.8rem; color: var(--primary); }
-        .navbar-brand span::after { content: 'Bus'; color: var(--primary); }
+        .navbar-brand i { 
+            font-size: 1.6rem; 
+            color: var(--primary); 
+            background: var(--primary-light);
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        /* --- FIX FOR 'BUSBUS' BUG --- */
+        /* Removed the ::after pseudo-element. The HTML contains the text 'Bus' inside the span, 
+           so we just style that span directly now. */
+        .navbar-brand span { 
+            color: var(--primary); 
+            position: relative;
+        }
 
         .btn-nav {
-            border: 2px solid #eee;
+            border: 2px solid #E2E8F0;
             color: var(--text-dark);
             font-weight: 600;
             padding: 10px 24px;
             border-radius: 50px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+            transition: var(--transition);
+            background: transparent;
         }
+        
         .btn-nav:hover {
-            border-color: var(--text-dark);
-            background: var(--text-dark);
-            color: white;
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
             transform: translateY(-2px);
+        }
+
+        .btn-nav.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .btn-nav.primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(229, 57, 53, 0.4);
         }
 
         /* --- Hero Section --- */
         .hero-section {
-            padding: 160px 0 100px;
+            padding: 180px 0 100px;
             position: relative;
             overflow: hidden;
         }
+
+        /* Ambient Background Blobs */
+        .hero-bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+            animation: blob 10s infinite alternate;
+        }
+        .blob-1 { top: -10%; right: -5%; width: 500px; height: 500px; background: #ffebeb; }
+        .blob-2 { bottom: 10%; left: -10%; width: 400px; height: 400px; background: #eef2ff; }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(229, 57, 53, 0.1);
+            background: linear-gradient(135deg, var(--primary-light) 0%, #fff 100%);
             color: var(--primary);
-            padding: 8px 20px;
+            padding: 10px 24px;
             border-radius: 50px;
             font-weight: 700;
             font-size: 0.85rem;
-            margin-bottom: 20px;
-            border:1px solid rgba(229, 57, 53, 0.2);
-            animation: pulseRing 2s infinite;
+            margin-bottom: 24px;
+            border: 1px solid rgba(229, 57, 53, 0.1);
+            box-shadow: var(--shadow-sm);
+            animation: pulseSoft 2.5s infinite;
         }
 
         .hero-title {
-            font-size: 4rem;
+            font-size: 3.8rem;
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 1.5rem;
-            letter-spacing: -1px;
-            background: linear-gradient(90deg, #1B1B1E 0%, #444 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -1.5px;
+            color: var(--text-dark);
         }
 
         .hero-subtitle {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: var(--text-muted);
-            margin-bottom: 2.5rem;
-            max-width: 550px;
-            line-height: 1.6;
+            margin-bottom: 3rem;
+            max-width: 500px;
+            line-height: 1.7;
             font-weight: 400;
         }
 
-        /* --- Search Bar --- */
+        /* --- Search Bar (Glassmorphism) --- */
         .search-container {
-            background: white;
-            padding: 30px;
-            border-radius: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            padding: 10px;
+            border-radius: var(--radius-2xl);
             box-shadow: var(--shadow-lg);
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
+            border: 1px solid var(--glass-border);
             position: relative;
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: transform 0.3s;
+            transition: var(--transition);
         }
-        .search-container:hover { transform: scale(1.01); }
+        
+        .search-container:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
 
-        .search-input-group {
+        .search-input-wrapper {
             position: relative;
-            background: #f8f9fa;
-            border-radius: 16px;
-            transition: 0.3s;
-            height: 64px;
-            display: flex;
-            align-items: center;
+            height: 72px;
         }
 
-        .search-input-group:focus-within {
-            background: white;
-            box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.1);
-        }
-
-        .search-input-group i {
+        .search-icon {
             position: absolute;
             left: 24px;
-            color: var(--primary);
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94A3B8;
             font-size: 1.2rem;
             z-index: 5;
-            transition: 0.3s;
+            transition: var(--transition);
         }
 
         .form-control-hero {
-            padding-left: 60px;
-            border: none;
-            height: 64px;
-            border-radius: 16px;
-            background: transparent;
+            padding-left: 64px;
+            border: 1px solid #E2E8F0;
+            height: 100%;
+            border-radius: 20px;
+            background: white;
             font-size: 1.1rem;
             font-weight: 600;
             color: var(--text-dark);
             width: 100%;
+            transition: var(--transition);
         }
-        .form-control-hero:focus { outline: none; }
-        .form-control-hero::placeholder { color: #adb5bd; font-weight: 500; }
+        
+        .form-control-hero:focus { 
+            outline: none; 
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.1);
+            background: #fff;
+        }
+
+        .search-input-wrapper:focus-within .search-icon {
+            color: var(--primary);
+        }
 
         .btn-hero-search {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, #d32f2f 100%);
             color: white;
             border: none;
-            height: 64px;
-            border-radius: 16px;
+            height: 72px;
+            border-radius: 20px;
             font-weight: 700;
             font-size: 1.1rem;
             width: 100%;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: var(--transition);
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 10px 20px -5px rgba(229, 57, 53, 0.3);
         }
 
         .btn-hero-search:hover {
-            background: #c62828;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(229, 57, 53, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(229, 57, 53, 0.4);
         }
 
-        .btn-text { transition: opacity 0.2s; z-index: 2; position: relative; }
-        .loader-icon { display: none; font-size: 1.2rem; animation: spin 1s linear infinite; }
+        .btn-text { transition: opacity 0.2s; position: relative; z-index: 2; }
+        .loader-icon { 
+            display: none; 
+            font-size: 1.5rem; 
+            animation: spin 1s linear infinite; 
+            position: absolute;
+        }
+        
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        
         .btn-hero-search.loading .btn-text { opacity: 0; }
         .btn-hero-search.loading .loader-icon { display: block; }
+
+        /* --- Hero Image & Animation --- */
+        .hero-img-wrapper { position: relative; }
+        
+        /* Bus Animation Line */
+        .route-line {
+            position: absolute; top: 50%; left: 0; width: 100%; height: 4px; 
+            background: #E2E8F0; z-index: 0; border-radius: 4px; transform: translateY(-50%);
+        }
+        
+        .route-dot {
+            position: absolute; top: 50%; width: 16px; height: 16px; 
+            background: white; border: 4px solid #CBD5E1; border-radius: 50%; z-index: 1; transform: translateY(-50%);
+        }
+        .dot-start { left: 0; border-color: var(--primary); }
+        .dot-end { right: 0; border-color: var(--text-muted); }
+
+        /* The Animated Bus */
+        .bus-anim-icon {
+            position: absolute;
+            top: 50%;
+            left: -10%;
+            font-size: 2.5rem;
+            color: var(--primary);
+            z-index: 2;
+            transform: translateY(-50%);
+            filter: drop-shadow(0 4px 6px rgba(229, 57, 53, 0.3));
+            animation: driveBus 8s linear infinite;
+        }
+
+        .hero-main-img {
+            width: 100%;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            z-index: 1;
+            transition: var(--transition);
+            border: 4px solid white;
+        }
+        
+        /* Floating Badge */
+        .float-badge {
+            position: absolute; 
+            bottom: -20px; 
+            right: 0px; 
+            background: white; 
+            padding: 16px 24px; 
+            border-radius: 20px; 
+            box-shadow: var(--shadow-lg); 
+            z-index: 3; 
+            display: flex; 
+            align-items: center; 
+            gap: 16px; 
+            max-width: 260px; 
+            animation: float 5s ease-in-out infinite;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        
+        .icon-circle-sm {
+            width: 44px; height: 44px; 
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 14px;
+            color: white;
+            flex-shrink: 0;
+        }
 
         /* --- Stats Section --- */
         .stats-section {
             background: white;
+            border-radius: var(--radius-xl);
             padding: 60px 0;
-            margin-bottom: 80px;
-            border-radius: 30px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 100px;
+            position: relative;
+            z-index: 2;
         }
-        .stat-item { text-align: center; padding: 20px; }
-        .stat-number { font-size: 3.5rem; font-weight: 800; color: var(--text-dark); display: block; margin-bottom: 10px; line-height: 1; }
-        .stat-label { font-size: 1rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .stat-item { text-align: center; padding: 10px; }
+        .stat-number { 
+            font-size: 3.5rem; 
+            font-weight: 800; 
+            color: var(--text-dark); 
+            display: block; 
+            margin-bottom: 8px; 
+            line-height: 1; 
+            background: linear-gradient(180deg, var(--text-dark) 0%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-label { font-size: 0.9rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
 
         /* --- Destination Cards --- */
         .destination-card {
             background: white;
-            border-radius: 24px;
+            border-radius: var(--radius-xl);
             overflow: hidden;
             box-shadow: var(--shadow-sm);
-            transition: 0.4s;
+            transition: var(--transition);
             cursor: pointer;
             position: relative;
-            border:1px solid rgba(0,0,0,0.02);
+            border: none;
             height: 100%;
         }
 
@@ -264,11 +405,17 @@
             box-shadow: var(--shadow-lg);
         }
 
+        .dest-img-wrap {
+            height: 240px;
+            overflow: hidden;
+            position: relative;
+        }
+
         .dest-img {
-            height: 200px;
             width: 100%;
+            height: 100%;
             object-fit: cover;
-            transition: transform 0.5s;
+            transition: transform 0.8s ease;
         }
 
         .destination-card:hover .dest-img { transform: scale(1.1); }
@@ -276,60 +423,78 @@
         .dest-overlay {
             position: absolute;
             bottom: 0; left: 0; width: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            padding: 40px 20px 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+            padding: 60px 24px 24px;
             color: white;
         }
 
-        .dest-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 5px; }
-        .dest-price { font-size: 1.1rem; font-weight: 500; }
+        .dest-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .dest-price { font-size: 1.1rem; font-weight: 500; opacity: 0.9; }
         
         .btn-card-cta {
             background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(4px);
             border: 1px solid rgba(255,255,255,0.4);
             color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
+            padding: 8px 24px;
+            border-radius: 50px;
             font-weight: 600;
-            transition: 0.3s;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            margin-top: 12px;
+            display: inline-block;
         }
-        .destination-card:hover .btn-card-cta { background: var(--primary); border-color: var(--primary); }
+        
+        .destination-card:hover .btn-card-cta { 
+            background: var(--primary); 
+            border-color: var(--primary); 
+            transform: translateY(-2px);
+        }
 
         /* --- Features Section --- */
         .feature-card {
             background: white;
-            padding: 40px 30px;
-            border-radius: 24px;
+            padding: 40px;
+            border-radius: var(--radius-xl);
             box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: 0.3s;
+            border: 1px solid rgba(0,0,0,0.02);
+            transition: var(--transition);
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
+            position: relative;
+            overflow: hidden;
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             box-shadow: var(--shadow-lg);
-            border-color: var(--primary);
+            border-color: rgba(229, 57, 53, 0.2);
         }
 
-        .icon-box {
-            width: 70px; height: 70px;
-            background: rgba(229, 57, 53, 0.1);
+        /* Feature card hover effect background */
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .feature-card:hover::before { opacity: 1; }
+
+        .icon-box-lg {
+            width: 64px; height: 64px;
+            background: var(--primary-light);
             color: var(--primary);
-            border-radius: 20px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             margin-bottom: 24px;
-            transition: 0.4s;
+            transition: var(--transition);
         }
 
-        .feature-card:hover .icon-box {
+        .feature-card:hover .icon-box-lg {
             background: var(--primary);
             color: white;
             transform: rotateY(180deg);
@@ -337,48 +502,57 @@
 
         /* --- App Section --- */
         .app-section {
-            background: var(--text-dark);
-            border-radius: 30px;
-            padding: 60px;
+            background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+            border-radius: var(--radius-2xl);
+            padding: 80px 60px;
             color: white;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: relative;
             overflow: hidden;
-            margin-bottom: 80px;
+            margin-bottom: 100px;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
         }
-
-        .app-wrapper { position: relative; z-index: 2; }
-
-        .app-phone-mockup {
-            width: 280px;
-            border-radius: 40px;
-            border: 8px solid #444;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-            animation: float 6s ease-in-out infinite;
-            z-index: 2;
-            overflow: hidden;
+        
+        /* Decorative circles in dark section */
+        .app-circle {
+            position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,0.05);
         }
+        .c1 { width: 300px; height: 300px; top: -50px; right: -50px; }
+        .c2 { width: 150px; height: 150px; bottom: 50px; left: 50px; }
 
         .qr-btn {
             background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
             color: white;
-            padding: 12px 25px;
+            padding: 14px 28px;
             border-radius: 16px;
             font-weight: 600;
-            transition: 0.3s;
+            transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             text-decoration: none;
+            backdrop-filter: blur(4px);
         }
 
         .qr-btn:hover {
             background: white;
             color: var(--text-dark);
-            transform: scale(1.05);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .app-phone-mockup {
+            width: 260px;
+            border-radius: 36px;
+            border: 8px solid #334155;
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+            animation: float 6s ease-in-out infinite;
+            z-index: 2;
+            overflow: hidden;
+            position: relative;
         }
 
         /* --- Footer --- */
@@ -386,50 +560,50 @@
             position: absolute; top: -50px; left: 0; width: 100%; overflow: hidden; line-height: 0; z-index: 0;
         }
         .footer-wave svg { position: relative; display: block; width: calc(100% + 1.3px); height: 50px; }
-        .footer-wave .shape-fill { fill: #F5F5F7; }
+        .footer-wave .shape-fill { fill: #F8F9FC; } /* Match body bg */
         
         footer {
             position: relative;
             background: white;
             padding-top: 80px;
-            padding-bottom: 30px;
+            padding-bottom: 40px;
             border-top: 1px solid #eee;
             z-index: 1;
         }
 
-        .footer-heading { font-weight: 700; margin-bottom: 20px; color: var(--text-dark); }
+        .footer-heading { font-weight: 700; margin-bottom: 24px; color: var(--text-dark); font-size: 1.1rem; }
         .footer-link {
-            display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 12px; transition: 0.3s;
+            display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 14px; transition: var(--transition); font-weight: 500;
         }
-        .footer-link:hover { color: var(--primary); padding-left: 5px; }
+        .footer-link:hover { color: var(--primary); padding-left: 8px; }
 
         .social-icon {
-            width: 40px; height: 40px; border-radius: 50%; background: #f8f9fa;
+            width: 44px; height: 44px; border-radius: 50%; background: #F1F5F9;
             display: inline-flex; align-items: center; justify-content: center; color: var(--text-dark);
-            margin-right: 10px; transition: 0.3s; text-decoration: none;
+            margin-right: 12px; transition: var(--transition); text-decoration: none;
         }
-        .social-icon:hover { background: var(--primary); color: white; transform: translateY(-3px); }
+        .social-icon:hover { background: var(--primary); color: white; transform: translateY(-5px); }
 
         #toast-container {
-            position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+            position: fixed; bottom: 30px; right: 30px; z-index: 9999;
         }
         
         .custom-toast {
             background: white; border-left: 5px solid var(--primary);
-            padding: 15px 25px; border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-top: 10px; display: flex; align-items: center; gap: 15px;
-            transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); min-width: 300px;
+            padding: 20px 25px; border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-top: 15px; display: flex; align-items: center; gap: 15px;
+            transform: translateX(120%); transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); min-width: 320px;
         }
         
         .custom-toast.show { transform: translateX(0); }
-
-        .toast-icon { color: var(--primary); font-size: 1.2rem; }
+        .toast-icon { color: var(--primary); font-size: 1.4rem; }
 
         @media (max-width: 991px) {
-            .app-section { flex-direction: column; text-align: center; padding: 40px 20px; }
-            .app-wrapper { margin-top: 40px; }
-            .hero-title { font-size: 3rem; }
+            .app-section { flex-direction: column; text-align: center; padding: 60px 30px; }
+            .app-wrapper { margin-top: 50px; }
+            .hero-title { font-size: 2.8rem; }
+            .stats-section { margin-bottom: 60px; }
         }
     </style>
 </head>
@@ -439,7 +613,8 @@
     <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <i class="fas fa-bus-alt"></i> Smart<span>Bus</span>
+                <i class="fas fa-bus-alt"></i> 
+                <span>SmartBus</span>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -447,7 +622,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <div class="d-flex gap-3 mt-3 mt-lg-0 align-items-center">
                     <a href="login.html" class="btn btn-nav">Login</a>
-                    <a href="register.html" class="btn btn-nav" style="background: var(--primary); color: white; border-color: var(--primary);">Sign Up</a>
+                    <a href="register.html" class="btn btn-nav primary">Sign Up</a>
                 </div>
             </div>
         </div>
@@ -455,9 +630,13 @@
 
     <!-- Hero Section -->
     <section class="hero-section">
+        <!-- Background Decoration -->
+        <div class="hero-bg-blob blob-1"></div>
+        <div class="hero-bg-blob blob-2"></div>
+
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-7 mb-5 mb-lg-0">
+                <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="badge-container animate-on-scroll">
                         <div class="hero-badge">
                             <i class="fas fa-bolt"></i> New: Live GPS Tracking
@@ -473,16 +652,16 @@
                     <!-- Enhanced Search Form -->
                     <div class="search-container animate-on-scroll">
                         <form id="homeSearchForm" onsubmit="handleHomeSearch(event)">
-                            <div class="row g-3">
+                            <div class="row g-2">
                                 <div class="col-md-5 col-sm-12">
-                                    <div class="search-input-group">
-                                        <i class="fas fa-map-marker-alt"></i>
+                                    <div class="search-input-wrapper">
+                                        <i class="fas fa-map-marker-alt search-icon"></i>
                                         <input type="text" id="homeFrom" class="form-control form-control-hero" placeholder="From (e.g. Bangalore)" required>
                                     </div>
                                 </div>
                                 <div class="col-md-5 col-sm-12">
-                                    <div class="search-input-group">
-                                        <i class="fas fa-location-arrow"></i>
+                                    <div class="search-input-wrapper">
+                                        <i class="fas fa-location-arrow search-icon"></i>
                                         <input type="text" id="homeTo" class="form-control form-control-hero" placeholder="To (e.g. Kochi)" required>
                                     </div>
                                 </div>
@@ -503,22 +682,21 @@
                 </div>
 
                 <!-- Hero Image with Visualizer -->
-                <div class="col-lg-5 hero-img-wrapper animate-on-scroll">
-                    <!-- Route Visualizer Background -->
-                    <div style="position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: #ddd; z-index: 1; opacity: 0.5;"></div>
-                    <div style="position: absolute; top: 50%; left: 0; width: 10px; height: 10px; background: #ddd; border-radius: 50%; z-index: 1; margin-top: -5px;"></div>
-                    <div style="position: absolute; top: 50%; right: 0; width: 10px; height: 10px; background: #ddd; border-radius: 50%; z-index: 1; margin-top: -5px;"></div>
+                <div class="col-lg-6 hero-img-wrapper animate-on-scroll">
+                    <!-- Route Line -->
+                    <div class="route-line"></div>
+                    <div class="route-dot dot-start"></div>
+                    <div class="route-dot dot-end"></div>
                     
-                    <!-- Animated Bus Icon -->
-                    <i class="fas fa-bus" style="position: absolute; top: 48%; left: -10%; font-size: 2rem; color: var(--primary); animation: driveBus 4s linear infinite; z-index: 2; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));"></i>
+                    <!-- Animated Bus -->
+                    <i class="fas fa-bus bus-anim-icon"></i>
 
-                    <img src="https://picsum.photos/seed/bus/600/400" 
-                         style="width:100%; border-radius:30px; box-shadow: var(--shadow-lg); position: relative; z-index: 1;"
-                         alt="Bus Travel" class="hero-img">
+                    <img src="https://picsum.photos/seed/busmodern/800/600" 
+                         class="hero-main-img" alt="Bus Travel">
                     
                     <!-- Floating Badge -->
-                    <div class="floating-badge" style="position: absolute; bottom: -30px; right: 20px; background: white; padding: 15px 25px; border-radius: 16px; box-shadow: var(--shadow-lg); z-index: 3; display: flex; align-items: center; gap: 15px; max-width: 240px; animation: float 3s ease-in-out infinite;">
-                        <div class="bg-success rounded-circle p-2 text-white flex-shrink-0" style="width:40px; height:40px; display:flex; align-items:center; justify-content:center;">
+                    <div class="float-badge">
+                        <div class="icon-circle-sm bg-success">
                             <i class="fas fa-sun"></i>
                         </div>
                         <div class="d-flex flex-column justify-content-center">
@@ -531,11 +709,7 @@
         </div>
     </section>
 
-    <!-- Search Results (Hidden by default) -->
-    <!-- 
-         NOTE: We are keeping this HTML structure, but the JS has been updated to redirect instead of showing this.
-         If you want to remove this section entirely, you can delete the <div id="resultsContainer"> block.
-    -->
+    <!-- Search Results (Hidden by default - Logic kept same) -->
     <div class="container" id="resultsContainer" style="display:none;">
         <div id="searchResults">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -543,14 +717,8 @@
                 <button onclick="closeResults()" class="btn btn-sm btn-outline-secondary rounded-pill px-4">Close</button>
             </div>
             
-            <!-- 
-                UPDATED RESULTS:
-                Added onclick="selectBus(...)" to handle redirection.
-                Added visual "Select Seats" button for better UI.
-            -->
-
-            <!-- Mock Result 1: Seater -->
-            <div class="result-item animate-on-scroll" onclick="selectBus('SmartBus Volvo', 650, 'seater')">
+            <!-- Result Items (Styled slightly better) -->
+            <div class="result-item p-4 bg-white mb-3 rounded-3 shadow-sm animate-on-scroll" onclick="selectBus('SmartBus Volvo', 650, 'seater')">
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h5 class="fw-bold mb-1">SmartBus Volvo <span class="badge bg-success">On Time</span></h5>
@@ -559,15 +727,14 @@
                     <div class="col-md-4 text-end">
                         <div class="h4 mb-0 fw-bold text-primary">₹650</div>
                         <small class="text-muted d-block mb-2">22 Seats Left</small>
-                        <button class="btn-select-seats shadow-sm">
-                            Select Seats <i class="fas fa-arrow-right small"></i>
+                        <button class="btn btn-sm btn-dark rounded-pill px-4">
+                            Select Seats <i class="fas fa-arrow-right small ms-1"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Mock Result 2: Seater (Delayed) -->
-            <div class="result-item animate-on-scroll" onclick="selectBus('Express Lines Multi-Axle', 820, 'seater')">
+            <div class="result-item p-4 bg-white mb-3 rounded-3 shadow-sm animate-on-scroll" onclick="selectBus('Express Lines Multi-Axle', 820, 'seater')">
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h5 class="fw-bold mb-1">Express Lines Multi-Axle <span class="badge bg-warning text-dark">Delayed 15m</span></h5>
@@ -576,15 +743,14 @@
                     <div class="col-md-4 text-end">
                         <div class="h4 mb-0 fw-bold text-primary">₹820</div>
                         <small class="text-muted d-block mb-2">5 Seats Left</small>
-                        <button class="btn-select-seats shadow-sm">
-                            Select Seats <i class="fas fa-arrow-right small"></i>
+                        <button class="btn btn-sm btn-dark rounded-pill px-4">
+                            Select Seats <i class="fas fa-arrow-right small ms-1"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Mock Result 3: Sleeper -->
-            <div class="result-item animate-on-scroll" onclick="selectBus('Sleeper Premium', 900, 'sleeper')">
+            <div class="result-item p-4 bg-white mb-3 rounded-3 shadow-sm animate-on-scroll" onclick="selectBus('Sleeper Premium', 900, 'sleeper')">
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h5 class="fw-bold mb-1">Sleeper Premium <span class="badge bg-success">On Time</span></h5>
@@ -593,8 +759,8 @@
                     <div class="col-md-4 text-end">
                         <div class="h4 mb-0 fw-bold text-primary">₹900</div>
                         <small class="text-muted d-block mb-2">12 Seats Left</small>
-                        <button class="btn-select-seats shadow-sm">
-                            Select Seats <i class="fas fa-arrow-right small"></i>
+                        <button class="btn btn-sm btn-dark rounded-pill px-4">
+                            Select Seats <i class="fas fa-arrow-right small ms-1"></i>
                         </button>
                     </div>
                 </div>
@@ -635,7 +801,7 @@
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="feature-card animate-on-scroll">
-                    <div class="icon-box">
+                    <div class="icon-box-lg">
                         <i class="fas fa-sun"></i>
                     </div>
                     <h5 class="fw-bold">Avoid Sunlight</h5>
@@ -644,7 +810,7 @@
             </div>
             <div class="col-md-4">
                 <div class="feature-card animate-on-scroll">
-                    <div class="icon-box">
+                    <div class="icon-box-lg">
                         <i class="fas fa-map-marked-alt"></i>
                     </div>
                     <h5 class="fw-bold">Live Tracking</h5>
@@ -653,7 +819,7 @@
             </div>
             <div class="col-md-4">
                 <div class="feature-card animate-on-scroll">
-                    <div class="icon-box">
+                    <div class="icon-box-lg">
                         <i class="fas fa-ticket-alt"></i>
                     </div>
                     <h5 class="fw-bold">Easy Booking</h5>
@@ -669,7 +835,9 @@
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="destination-card animate-on-scroll" onclick="quickRoute('Bangalore', 'Kochi')">
-                    <img src="https://picsum.photos/seed/kerala/400/300" class="dest-img" alt="Kochi">
+                    <div class="dest-img-wrap">
+                        <img src="https://picsum.photos/seed/kerala/600/400" class="dest-img" alt="Kochi">
+                    </div>
                     <div class="dest-overlay">
                         <div class="dest-name">Kochi</div>
                         <div class="dest-price">From ₹450</div>
@@ -679,7 +847,9 @@
             </div>
             <div class="col-md-4">
                 <div class="destination-card animate-on-scroll" onclick="quickRoute('Mumbai', 'Goa')">
-                    <img src="https://picsum.photos/seed/goa/400/300" class="dest-img" alt="Goa">
+                    <div class="dest-img-wrap">
+                        <img src="https://picsum.photos/seed/goa/600/400" class="dest-img" alt="Goa">
+                    </div>
                     <div class="dest-overlay">
                         <div class="dest-name">Goa</div>
                         <div class="dest-price">From ₹750</div>
@@ -689,7 +859,9 @@
             </div>
             <div class="col-md-4">
                 <div class="destination-card animate-on-scroll" onclick="quickRoute('Delhi', 'Jaipur')">
-                    <img src="https://picsum.photos/seed/jaipur/400/300" class="dest-img" alt="Jaipur">
+                    <div class="dest-img-wrap">
+                        <img src="https://picsum.photos/seed/jaipur/600/400" class="dest-img" alt="Jaipur">
+                    </div>
                     <div class="dest-overlay">
                         <div class="dest-name">Jaipur</div>
                         <div class="dest-price">From ₹800</div>
@@ -703,30 +875,33 @@
     <!-- App Promo Section -->
     <div class="container">
         <section class="app-section flex-column flex-lg-row animate-on-scroll">
-            <div class="flex-grow-1 mb-4 mb-lg-0">
+            <div class="app-circle c1"></div>
+            <div class="app-circle c2"></div>
+
+            <div class="flex-grow-1 mb-4 mb-lg-0" style="position: relative; z-index: 2;">
                 <h2 class="fw-bold mb-3">The SmartBus App</h2>
-                <p class="text-white-50 mb-4">Manage bookings on go. Get notified when your bus arrives.</p>
+                <p class="text-white-50 mb-5">Manage bookings on go. Get notified when your bus arrives. Experience travel like never before.</p>
                 
                 <div class="d-flex gap-3 flex-wrap mb-4">
                     <a href="#" class="qr-btn">
                         <i class="fab fa-apple fa-2x"></i>
                         <div class="text-start lh-1 d-flex flex-column justify-content-center">
-                            <small class="d-block opacity-75">Download on the</small>
-                            <span class="fw-bold">App Store</span>
+                            <small class="d-block opacity-75" style="font-size: 0.75rem;">Download on the</small>
+                            <span class="fw-bold" style="font-size: 1.1rem;">App Store</span>
                         </div>
                     </a>
                     <a href="#" class="qr-btn">
                         <i class="fab fa-google-play fa-2x"></i>
                         <div class="text-start lh-1 d-flex flex-column justify-content-center">
-                            <small class="d-block opacity-75">Get it on the</small>
-                            <span class="fw-bold">Google Play</span>
+                            <small class="d-block opacity-75" style="font-size: 0.75rem;">Get it on</small>
+                            <span class="fw-bold" style="font-size: 1.1rem;">Google Play</span>
                         </div>
                     </a>
                 </div>
             </div>
             <div class="app-wrapper d-none d-lg-block">
                 <div class="app-phone-mockup">
-                    <img src="https://picsum.photos/seed/app/300/600" 
+                    <img src="https://picsum.photos/seed/appui/300/600" 
                          style="width:100%; height:100%; object-fit:cover;" alt="App Mockup">
                 </div>
             </div>
@@ -744,7 +919,8 @@
             <div class="row g-4">
                 <div class="col-lg-4 mb-4">
                     <a class="navbar-brand mb-3" href="#">
-                        <i class="fas fa-bus-alt"></i> Smart<span>Bus</span>
+                        <i class="fas fa-bus-alt"></i> 
+                        <span>SmartBus</span>
                     </a>
                     <p class="text-muted">Making road travel smarter, safer, and more comfortable for everyone across the country.</p>
                     <div class="d-flex">
@@ -771,8 +947,8 @@
                     <h6 class="footer-heading">Subscribe</h6>
                     <p class="text-muted small mb-3">Get latest updates and offers.</p>
                     <div class="input-group">
-                        <input type="email" class="form-control" placeholder="Your email">
-                        <button class="btn btn-primary" style="background: var(--primary); border:none;">Go</button>
+                        <input type="email" class="form-control" placeholder="Your email" style="border-radius: 12px 0 0 12px; border: 1px solid #E2E8F0;">
+                        <button class="btn btn-primary" style="background: var(--primary); border:none; border-radius: 0 12px 12px 0;">Go</button>
                     </div>
                 </div>
             </div>
@@ -802,14 +978,14 @@
                 }
             });
 
-            // --- 2. Intersection Observer for Scroll Animations ---
+            // --- 2. Intersection Observer for Staggered Scroll Animations ---
             const observerOptions = {
                 threshold: 0.1,
                 rootMargin: "0px 0px -50px 0px"
             };
 
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
+                entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                         
@@ -823,7 +999,11 @@
                 });
             }, observerOptions);
 
-            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            // Add stagger effect delay to all animate-on-scroll elements based on their index
+            // This makes them slide in one after another smoothly
+            document.querySelectorAll('.animate-on-scroll').forEach((el, index) => {
+                // Base delay + index increment (max out at 0.6s to avoid too much lag)
+                el.style.transitionDelay = `${Math.min(index * 0.1, 0.6)}s`; 
                 observer.observe(el);
             });
 
@@ -849,7 +1029,7 @@
             }
         });
 
-        // --- 4. Search Form Handling ---
+        // --- 4. Search Form Handling (Redirect Logic Preserved) ---
         function handleHomeSearch(e) {
             e.preventDefault();
             const btn = document.getElementById('searchBtn');
@@ -861,8 +1041,7 @@
             
             setTimeout(() => {
                 btn.classList.remove('loading');
-                // REDIRECT TO search.html INSTEAD OF SHOWING RESULTS
-                // We encode the values to handle spaces or special characters
+                // REDIRECT LOGIC KEPT EXACTLY THE SAME
                 const targetUrl = `search.html?from=${encodeURIComponent(fromVal)}&to=${encodeURIComponent(toVal)}`;
                 window.location.href = targetUrl;
             }, 800);
@@ -874,27 +1053,24 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- 5. Redirect to Seats Page ---
+        // --- 5. Redirect to Seats Page (Logic Preserved) ---
         function selectBus(name, price, type) {
             const fromVal = document.getElementById('homeFrom').value;
             const toVal = document.getElementById('homeTo').value;
 
-            // Construct URL with all necessary parameters
-            // encodeURIComponent handles spaces in city names (e.g. "New York")
+            // Logic kept the same
             const targetUrl = `seats.html?name=${encodeURIComponent(name)}&price=${price}&isSleeper=${type === 'sleeper'}&from=${encodeURIComponent(fromVal)}&to=${encodeURIComponent(toVal)}`;
-
-            // Redirect
             window.location.href = targetUrl;
         }
 
-        // --- 6. Quick Route from Cards ---
+        // --- 6. Quick Route from Cards (Logic Preserved) ---
         function quickRoute(from, to) {
             document.getElementById('homeFrom').value = from;
             document.getElementById('homeTo').value = to;
             
             showToast(`Selected Route: ${from} to ${to}`, 'info');
             
-            // Scroll up to search bar
+            // Scroll up to search bar smoothly
             document.querySelector('.hero-section').scrollIntoView({ 
                 behavior: 'smooth', 
                 block: 'center' 
@@ -927,7 +1103,7 @@
                 toast.classList.remove('show');
                 setTimeout(() => {
                     toast.remove();
-                }, 400); // Wait for transition
+                }, 500); // Wait for transition
             }, 3000);
         }
     </script>

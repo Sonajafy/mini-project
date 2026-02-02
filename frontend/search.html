@@ -9,626 +9,656 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --primary: #E53935;
-            --primary-hover: #c62828;
-            --accent: #F5F5F7;
-            --text-dark: #1B1B1E;
-            --text-muted: #6c757d;
-            --shadow-sm: 0 4px 6px rgba(0,0,0,0.04);
-            --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+            --primary-hover: #D32F2F;
+            --primary-bg: #FFEBEE;
+            --text-main: #1E293B;
+            --text-secondary: #64748B;
             --glass-bg: rgba(255, 255, 255, 0.92);
-            --radius: 20px;
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 50px -12px rgba(0,0,0,0.15);
+            --radius: 24px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smooth "Apple-like" easing */
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #1a1a1a;
-            color: var(--text-dark);
-            padding-top: 0; 
-            min-height: 100vh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0F172A; /* Dark base for contrast */
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 80px; /* Space for footer */
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* --- Cinematic Background --- */
-        .bg-image {
+        /* --- Background Layers --- */
+        .bg-wrapper {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
-            /* High quality scenic image */
-            background-image: url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=2574&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed; /* Parallax effect */
-        }
-
-        /* Dark Overlay for readability */
-        .bg-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* 40% black tint */
             z-index: -1;
-            backdrop-filter: blur(2px);
+            overflow: hidden;
         }
 
-        /* --- Top Bar (Glass) --- */
+        .bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4; /* Subtle background */
+            filter: blur(3px) brightness(0.8);
+            transform: scale(1.1); /* Prevents edge blur visibility */
+        }
+
+        /* --- Header --- */
         .top-header {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            backdrop-filter: blur(20px);
+            padding: 16px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-        }
-        
-        .back-link { text-decoration: none; color: var(--text-dark); font-weight: 700; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
-        .back-link:hover { color: var(--primary); transform: translateX(-5px); }
-
-        /* --- Popular Chips --- */
-        .popular-section {
-            margin-bottom: 24px;
-            animation: slideDown 0.6s ease-out;
-        }
-        
-        .popular-title {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: rgba(255,255,255,0.8);
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
-        .popular-chips {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-            scrollbar-width: none;
-        }
-        .popular-chips::-webkit-scrollbar { display: none; }
+        .brand-area { cursor: pointer; transition: var(--transition); }
+        .brand-area:hover { opacity: 0.8; }
 
-        .popular-chip {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .popular-chip:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(229, 57, 53, 0.4);
-        }
-
-        /* --- Search Wrapper (Glassmorphism) --- */
-        .search-wrapper {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            padding: 30px;
-            margin-bottom: 40px;
-            border-radius: 30px;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(255,255,255,0.5);
-            transition: all 0.3s ease;
-            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        .input-group-icon {
+        /* --- Main Container --- */
+        .main-content {
+            max-width: 900px; /* Restrict width for better readability */
+            margin: 0 auto;
+            padding-top: 30px;
             position: relative;
+            z-index: 1;
         }
 
-        .input-group-icon i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary);
-            z-index: 5;
-            transition: 0.3s;
+        /* --- Search Box --- */
+        .search-container {
+            background: var(--glass-bg);
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 30px;
+            border: 1px solid var(--glass-border);
+            transform: translateY(0);
+            transition: var(--transition);
         }
-
-        .form-control-modern {
-            padding-left: 48px;
+        
+        /* Inputs */
+        .form-input-modern {
+            width: 100%;
             border: 2px solid transparent;
+            background: #F8FAFC;
+            padding: 16px 20px;
             border-radius: 16px;
-            height: 58px;
             font-weight: 600;
-            color: var(--text-dark);
-            background: #fcfcfc;
-            transition: all 0.3s ease;
+            font-size: 1rem;
+            color: var(--text-main);
+            transition: var(--transition);
         }
-
-        .form-control-modern:focus { 
-            box-shadow: none; 
-            border-color: rgba(229, 57, 53, 0.3); 
-            background: white; 
-            box-shadow: 0 0 0 5px rgba(229, 57, 53, 0.05); 
+        
+        .form-input-modern:focus {
+            background: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 6px rgba(229, 57, 53, 0.05);
+            outline: none;
         }
 
         .btn-search {
             background: var(--primary);
             color: white;
             border: none;
-            height: 58px;
+            padding: 16px 32px;
             border-radius: 16px;
             font-weight: 700;
-            font-size: 1rem;
             width: 100%;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 10px 20px rgba(229, 57, 53, 0.3);
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.25);
         }
-
         .btn-search:hover {
             background: var(--primary-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(229, 57, 53, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(229, 57, 53, 0.35);
         }
 
-        /* --- Bus Cards (Smooth Transitions) --- */
-        .bus-card {
-            background: white;
-            border-radius: 24px;
-            padding: 30px;
+        /* --- Popular Routes --- */
+        .popular-tags {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
             margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smooth easing */
-            opacity: 0; 
-            transform: translateY(30px);
+            scrollbar-width: none; /* Firefox */
+        }
+        .popular-tags::-webkit-scrollbar { display: none; } /* Chrome */
+
+        .tag-pill {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: var(--transition);
+        }
+        .tag-pill:hover {
+            background: white;
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* --- Tips Section --- */
+        .tips-box {
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFFFFF 100%);
+            border-left: 4px solid #F97316;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-soft);
+            animation: fadeIn 0.5s ease-out;
+        }
+        .tips-box h6 { color: #C2410C; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .tips-list li { font-size: 0.9rem; color: #475569; margin-bottom: 8px; display: flex; gap: 10px; }
+        .tips-list li i { color: #F97316; margin-top: 3px; }
+
+        /* --- Filter Tabs --- */
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .filter-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
+        }
+
+        /* --- BUS CARD (The Core) --- */
+        /* Using Grid to ensure NO overlapping */
+        .bus-card {
+            background: var(--glass-bg);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: var(--transition);
             cursor: pointer;
             position: relative;
-            overflow: hidden;
+            display: grid;
+            gap: 20px;
+            /* Default Grid: Info | Price */
+            grid-template-columns: 1fr auto;
+            opacity: 0;
+            transform: translateY(20px);
         }
 
-        /* Reveal Animation via JS class */
         .bus-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Hover Effect: Lift and Glow */
         .bus-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            border-color: var(--primary);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(229, 57, 53, 0.3);
         }
 
-        /* Inner shine effect on hover */
-        .bus-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.8), transparent);
-            transform: rotate(45deg) translateY(100%);
-            transition: 0.5s;
-        }
-
-        .bus-card:hover::after {
-            transform: rotate(45deg) translateY(0);
+        /* Left Side: Info */
+        .bus-info {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 20px;
+            align-items: start;
         }
 
         .bus-logo {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            width: 64px;
+            height: 64px;
+            background: #F1F5F9;
             border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: var(--primary);
-            margin-right: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: 0.3s;
         }
 
-        .bus-card:hover .bus-logo {
-            background: white;
-            transform: rotate(5deg) scale(1.1);
+        .bus-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
         }
 
-        .bus-route-line {
-            position: relative;
-            text-align: center;
-            padding: 10px 0;
-            flex-grow: 1;
+        .bus-name-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
         }
 
-        .bus-route-line::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 20px;
-            right: 20px;
-            height: 2px;
-            background: #e0e0e0;
-            z-index: -1;
-            border-top: 2px dashed #ccc;
+        .bus-name { font-weight: 800; font-size: 1.15rem; color: var(--text-main); }
+        .bus-type { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 10px; border-radius: 8px; }
+        .type-govt { background: #E0F2FE; color: #0369A1; }
+        .type-priv { background: #FEF3C7; color: #B45309; }
+
+        .bus-sub { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px; }
+
+        /* Time Section (Center aligned in card on desktop, but inside bus-info on grid) */
+        .time-display {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #F8FAFC;
+            padding: 12px 20px;
+            border-radius: 16px;
+            width: fit-content;
+            margin-bottom: 12px;
         }
 
-        .time-badge {
-            background: white;
-            border: 1px solid #eee;
-            padding: 6px 14px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1rem;
-            z-index: 1;
-            position: relative;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .duration-text {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 6px;
-            background: var(--accent);
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-
-        .amenities { font-size: 1.2rem; color: #adb5bd; }
+        .time-col { text-align: center; }
+        .time-val { font-size: 1.2rem; font-weight: 800; color: var(--text-main); display: block; line-height: 1.2; }
+        .dur-val { font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; background: #E2E8F0; padding: 2px 8px; border-radius: 6px; }
         
-        .amenities i {
-            margin-right: 14px;
-            transition: 0.3s;
-            cursor: help;
+        .dash-line { height: 2px; width: 40px; background: #CBD5E1; position: relative; }
+        .dash-line::after { content: '>'; position: absolute; right: -4px; top: -7px; color: #CBD5E1; font-size: 10px; font-weight: bold; }
+
+        .amenities-row { display: flex; gap: 15px; color: #94A3B8; font-size: 1.1rem; }
+        .amenities-row i { transition: 0.2s; }
+        .amenities-row i:hover { color: var(--primary); transform: scale(1.1); }
+
+        /* Right Side: Price & Action */
+        .bus-action {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-left: 20px;
+            border-left: 1px solid #E2E8F0;
+            min-width: 140px;
         }
 
-        .amenities i:hover {
-            color: var(--primary);
-            transform: scale(1.2);
-        }
+        .rating-box { font-size: 0.85rem; font-weight: 700; color: #F59E0B; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
+        
+        .price-tag { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 15px; }
+        .price-tag span { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
 
-        .price-tag {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text-dark);
-        }
-
-        .btn-view-seats {
-            background: white;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            font-weight: 700;
-            border-radius: 50px;
-            padding: 10px 24px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 4px 10px rgba(229, 57, 53, 0.1);
-        }
-
-        .bus-card:hover .btn-view-seats {
-            background: var(--primary);
+        .btn-seat {
+            background: var(--text-main);
             color: white;
-            box-shadow: 0 8px 20px rgba(229, 57, 53, 0.3);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            border: 2px solid var(--text-main);
         }
 
-        /* --- Helpers --- */
-        .loader-container { 
-            display: none; 
-            justify-content: center; 
-            padding: 60px; 
+        /* Hover State override for button */
+        .bus-card:hover .btn-seat {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(229, 57, 53, 0.3);
         }
-        .spinner-custom { 
-            width: 50px; 
-            height: 50px; 
-            border: 5px solid rgba(255,255,255,0.3); 
-            border-left-color: var(--primary); 
-            border-radius: 50%; 
-            animation: spin 1s linear infinite; 
-        }
-        
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Responsive tweaks */
+        /* Status Badge (Floating top right inside card) */
+        .status-badge {
+            position: absolute;
+            top: 24px;
+            right: 24px; /* Positioned inside right side usually, but here floating */
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 8px;
+            z-index: 2;
+            opacity: 0.9;
+        }
+        .st-ontime { background: #DCFCE7; color: #166534; }
+        .st-delayed { background: #FEF9C3; color: #854D0E; }
+
+        /* --- Responsive Logic (Mobile) --- */
         @media (max-width: 768px) {
-            .bus-card { padding: 20px; }
-            .time-badge { font-size: 0.85rem; }
-            .price-tag { font-size: 1.25rem; }
-            .btn-search { font-size: 0.9rem; }
-            .bus-logo { width: 50px; height: 50px; font-size: 1.4rem; }
+            .bus-card {
+                /* Stack everything vertically on mobile */
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .bus-info {
+                grid-template-columns: auto 1fr;
+                gap: 15px;
+            }
+
+            .bus-action {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                border-left: none;
+                border-top: 1px solid #E2E8F0;
+                padding-left: 0;
+                padding-top: 15px;
+                min-width: 100%;
+            }
+
+            .price-tag { font-size: 1.4rem; margin-bottom: 0; }
+            .btn-seat { padding: 10px 20px; width: auto; font-size: 0.9rem; }
+            
+            .time-display { width: 100%; justify-content: space-between; }
+            .dash-line { width: 100%; }
         }
+
+        /* --- Loader --- */
+        .loader-wrapper {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);
+            z-index: 2000; display: none; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .spinner {
+            width: 60px; height: 60px;
+            border: 5px solid rgba(229, 57, 53, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
     </style>
 </head>
 <body>
 
-    <!-- Background Layers -->
-    <div class="bg-image"></div>
-    <div class="bg-overlay"></div>
+    <!-- Background -->
+    <div class="bg-wrapper">
+        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop" class="bg-image" alt="Background">
+    </div>
 
     <!-- Header -->
     <div class="top-header">
         <div class="container">
-            <a href="index.html" class="back-link">
-                <i class="fas fa-arrow-left"></i> Back
-            </a>
-            <h4 class="fw-bold mt-2 mb-0 text-dark" id="pageTitle">Find Your Bus</h4>
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="index.html" class="text-dark text-decoration-none d-flex align-items-center gap-2 fw-bold fs-5">
+                    <i class="fas fa-arrow-left"></i> <span>Home</span>
+                </a>
+                <div class="text-end d-none d-sm-block">
+                    <div class="fw-bold text-dark" id="pageTitle">Find Your Bus</div>
+                    <div class="small text-muted" id="subTitle">Search routes below</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Search Section -->
-    <div class="container mt-4">
+    <!-- Main Content -->
+    <div class="container main-content">
         
-        <!-- Popular Routes Feature -->
-        <div class="popular-section">
-            <div class="popular-title">Popular Routes</div>
-            <div class="popular-chips">
-                <span class="popular-chip" onclick="quickRoute('Bangalore', 'Kochi')">Bangalore ➔ Kochi</span>
-                <span class="popular-chip" onclick="quickRoute('Bangalore', 'Chennai')">Bangalore ➔ Chennai</span>
-                <span class="popular-chip" onclick="quickRoute('Mumbai', 'Pune')">Mumbai ➔ Pune</span>
-                <span class="popular-chip" onclick="quickRoute('Delhi', 'Jaipur')">Delhi ➔ Jaipur</span>
-            </div>
-        </div>
-
-        <div class="search-wrapper">
+        <!-- Search Form -->
+        <div class="search-container">
             <form id="searchForm" onsubmit="handleSearch(event)">
                 <div class="row g-3">
-                    <!-- From -->
-                    <div class="col-md-3">
-                        <div class="input-group-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <input type="text" id="inputFrom" class="form-control form-control-modern" placeholder="From (e.g. Bangalore)" required>
-                        </div>
+                    <div class="col-md-3 col-6">
+                        <label class="small text-muted fw-bold mb-2">FROM</label>
+                        <input type="text" id="inputFrom" class="form-input-modern" placeholder="City (e.g. Blr)" required>
                     </div>
-                    <!-- Swap Icon -->
-                    <div class="col-md-1 text-center d-none d-md-flex align-items-center justify-content-center">
-                        <i class="fas fa-exchange-alt text-muted" style="transform: rotate(90deg);"></i>
+                    <div class="col-md-3 col-6">
+                        <label class="small text-muted fw-bold mb-2">TO</label>
+                        <input type="text" id="inputTo" class="form-input-modern" placeholder="City (e.g. Kochi)" required>
                     </div>
-                    <!-- To -->
-                    <div class="col-md-3">
-                        <div class="input-group-icon">
-                            <i class="fas fa-location-arrow"></i>
-                            <input type="text" id="inputTo" class="form-control form-control-modern" placeholder="To (e.g. Kochi)" required>
-                        </div>
+                    <div class="col-md-4 col-6">
+                        <label class="small text-muted fw-bold mb-2">DATE</label>
+                        <input type="date" id="inputDate" class="form-input-modern" required>
                     </div>
-                    <div class="col-md-3">
-                        <div class="input-group-icon">
-                            <i class="fas fa-calendar-alt"></i>
-                            <input type="date" id="inputDate" class="form-control form-control-modern" required>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn-search">Search Buses</button>
+                    <div class="col-md-2 col-6 d-flex align-items-end">
+                        <button type="submit" class="btn-search">
+                            <i class="fas fa-search me-2"></i> Search
+                        </button>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
 
-    <!-- Loader -->
-    <div class="container">
-        <div id="loader" class="loader-container">
-            <div class="spinner-custom"></div>
-        </div>
-    </div>
-
-    <!-- Results Section -->
-    <div class="container" id="resultsContainer">
-        
-        <!-- Result 1 -->
-        <div class="bus-card" onclick="selectBus('KSRTC Swift', 950, 'seater')">
-            <div class="row align-items-center">
-                <!-- Bus Info -->
-                <div class="col-md-4 d-flex align-items-center mb-3 mb-md-0">
-                    <div class="bus-logo">
-                        <i class="fas fa-bus text-danger"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-1">KSRTC Swift</h5>
-                        <small class="text-muted">A/C Multi-Axle Volvo</small>
-                    </div>
-                </div>
-
-                <!-- Time & Route -->
-                <div class="col-md-4 text-center mb-3 mb-md-0">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <span class="fw-bold time-badge">10:00 PM</span>
-                        <div class="bus-route-line mx-3">
-                            <span class="duration-text">10h 30m</span>
-                        </div>
-                        <span class="fw-bold time-badge">08:30 AM</span>
-                    </div>
-                </div>
-
-                <!-- Price & Action -->
-                <div class="col-md-4 d-flex justify-content-between align-items-center">
-                    <div class="text-md-start text-center w-100 d-md-block d-flex justify-content-between">
-                        <div class="mb-2">
-                            <div class="text-warning small"><i class="fas fa-star"></i> 4.5</div>
-                            <div class="amenities small d-none d-md-block">
-                                <i class="fas fa-wifi" title="WiFi"></i>
-                                <i class="fas fa-snowflake" title="A/C"></i>
-                                <i class="fas fa-plug" title="Charging Point"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="price-tag">₹950</span>
-                            <span class="btn-view-seats ms-2">View Seats</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Popular Routes -->
+        <div class="popular-tags">
+            <div class="small text-white fw-bold me-2 align-self-center opacity-75">POPULAR:</div>
+            <div class="tag-pill" onclick="quickRoute('Bangalore', 'Kochi')">Blr ➔ Kochi</div>
+            <div class="tag-pill" onclick="quickRoute('Bangalore', 'Chennai')">Blr ➔ Cbe</div>
+            <div class="tag-pill" onclick="quickRoute('Mumbai', 'Pune')">Mum ➔ Pune</div>
+            <div class="tag-pill" onclick="quickRoute('Delhi', 'Jaipur')">Del ➔ Jai</div>
         </div>
 
-        <!-- Result 2 -->
-        <div class="bus-card" onclick="selectBus('SRS Travels', 1200, 'sleeper')">
-            <div class="row align-items-center">
-                <div class="col-md-4 d-flex align-items-center mb-3 mb-md-0">
-                    <div class="bus-logo">
-                        <i class="fas fa-bus-alt text-primary"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-1">SRS Travels</h5>
-                        <small class="text-muted">A/C Sleeper Semi-Sleeper</small>
-                    </div>
-                </div>
-                <div class="col-md-4 text-center mb-3 mb-md-0">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <span class="fw-bold time-badge">11:30 PM</span>
-                        <div class="bus-route-line mx-3">
-                            <span class="duration-text">11h 00m</span>
-                        </div>
-                        <span class="fw-bold time-badge">10:30 AM</span>
-                    </div>
-                </div>
-                <div class="col-md-4 d-flex justify-content-between align-items-center">
-                    <div class="text-md-start text-center w-100 d-md-block d-flex justify-content-between">
-                        <div class="mb-2">
-                            <div class="text-warning small"><i class="fas fa-star"></i> 4.2</div>
-                            <div class="amenities small d-none d-md-block">
-                                <i class="fas fa-wifi" title="WiFi"></i>
-                                <i class="fas fa-bed" title="Sleeper"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="price-tag">₹1200</span>
-                            <span class="btn-view-seats ms-2">View Seats</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Pro Tips -->
+        <div id="tipsSection" class="tips-box" style="display: none;">
+            <h6><i class="fas fa-lightbulb"></i> Smart Tips</h6>
+            <ul class="list-unstyled tips-list" id="tipsList"></ul>
         </div>
 
-        <!-- Result 3 -->
-        <div class="bus-card" onclick="selectBus('Orange Travels', 850, 'seater')">
-            <div class="row align-items-center">
-                <div class="col-md-4 d-flex align-items-center mb-3 mb-md-0">
-                    <div class="bus-logo">
-                        <i class="fas fa-shuttle-van text-warning"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-1">Orange Travels</h5>
-                        <small class="text-muted">A/C Seater Pushback</small>
-                    </div>
-                </div>
-                <div class="col-md-4 text-center mb-3 mb-md-0">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <span class="fw-bold time-badge">09:15 PM</span>
-                        <div class="bus-route-line mx-3">
-                            <span class="duration-text">09h 45m</span>
-                        </div>
-                        <span class="fw-bold time-badge">07:00 AM</span>
-                    </div>
-                </div>
-                <div class="col-md-4 d-flex justify-content-between align-items-center">
-                    <div class="text-md-start text-center w-100 d-md-block d-flex justify-content-between">
-                        <div class="mb-2">
-                            <div class="text-warning small"><i class="fas fa-star"></i> 3.9</div>
-                            <div class="amenities small d-none d-md-block">
-                                <i class="fas fa-snowflake" title="A/C"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="price-tag">₹850</span>
-                            <span class="btn-view-seats ms-2">View Seats</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Filters -->
+        <div id="filterSection" class="filters" style="display: none;">
+            <div class="filter-btn active" onclick="filterBuses('all')">All</div>
+            <div class="filter-btn" onclick="filterBuses('comfort')">Premium</div>
+            <div class="filter-btn" onclick="filterBuses('budget')">Budget</div>
+        </div>
+
+        <!-- Bus List -->
+        <div id="resultsContainer">
+            <!-- Cards Injected Here -->
         </div>
 
     </div>
 
-    <br><br><br>
+    <!-- Full Screen Loader -->
+    <div id="loader" class="loader-wrapper">
+        <div class="spinner"></div>
+        <div class="fw-bold text-muted">Finding the best routes...</div>
+    </div>
 
     <script>
-        // --- 1. Auto-Fill from URL Params ---
-        document.addEventListener("DOMContentLoaded", () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const fromParam = urlParams.get('from');
-            const toParam = urlParams.get('to');
+        // --- DATA ---
+        const buses = [
+            // Bangalore -> Kochi
+            { id: 1, from: 'Bangalore', to: 'Kochi', name: 'KSRTC Swift', type: 'Government', sub: 'Multi-Axle Volvo', dep: '22:00', arr: '08:30', price: 1150, rate: 4.6, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac', 'plug'] },
+            { id: 2, from: 'Bangalore', to: 'Kochi', name: 'Kallada Travels', type: 'Private', sub: 'G4 Sleeper', dep: '21:30', arr: '07:45', price: 1450, rate: 4.2, cat: 'comfort', status: 'ontime', am: ['bed', 'ac', 'plug'] },
+            { id: 3, from: 'Bangalore', to: 'Kochi', name: 'GreenLine Travels', type: 'Private', sub: 'A/C Sleeper', dep: '22:30', arr: '09:15', price: 1050, rate: 4.4, cat: 'comfort', status: 'ontime', am: ['bed', 'ac', 'water'] },
+            { id: 4, from: 'Bangalore', to: 'Kochi', name: 'Jabbar Travels', type: 'Private', sub: 'Multi-Axle', dep: '20:45', arr: '07:30', price: 950, rate: 3.9, cat: 'budget', status: 'delayed', am: ['ac', 'plug'] },
+            
+            // Bangalore -> Chennai
+            { id: 5, from: 'Bangalore', to: 'Chennai', name: 'KSRTC Airavat', type: 'Government', sub: 'Club Class', dep: '22:00', arr: '03:30', price: 850, rate: 4.7, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac', 'plug'] },
+            { id: 6, from: 'Bangalore', to: 'Chennai', name: 'National Travels', type: 'Private', sub: 'Non-Stop Volvo', dep: '23:15', arr: '04:30', price: 900, rate: 4.1, cat: 'comfort', status: 'ontime', am: ['ac', 'water'] },
+            { id: 7, from: 'Bangalore', to: 'Chennai', name: 'Parveen Travels', type: 'Private', sub: 'Business Class', dep: '21:00', arr: '02:30', price: 950, rate: 4.3, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac'] },
+            { id: 8, from: 'Bangalore', to: 'Chennai', name: 'Asian Xpress', type: 'Private', sub: 'Multi-Axle', dep: '22:45', arr: '04:15', price: 700, rate: 3.8, cat: 'budget', status: 'ontime', am: ['ac'] },
 
-            // Set today's date
-            const dateInput = document.querySelector('input[type="date"]');
-            const today = new Date().toISOString().split('T')[0];
-            dateInput.value = today;
-            dateInput.min = today;
+            // Mumbai -> Pune
+            { id: 9, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '18:00', arr: '19:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
+            { id: 10, from: 'Mumbai', to: 'Pune', name: 'Neeta Travels', type: 'Private', sub: 'Luxury Coach', dep: '17:30', arr: '19:15', price: 400, rate: 4.0, cat: 'comfort', status: 'ontime', am: ['ac', 'water'] },
+            { id: 11, from: 'Mumbai', to: 'Pune', name: 'Purple Metrolink', type: 'Private', sub: 'AC Seater', dep: '18:15', arr: '20:00', price: 350, rate: 4.2, cat: 'comfort', status: 'boarding', am: ['ac'] },
+            { id: 12, from: 'Mumbai', to: 'Pune', name: 'Zingbus', type: 'Private', sub: 'Prime AC', dep: '18:30', arr: '20:30', price: 250, rate: 4.4, cat: 'budget', status: 'ontime', am: ['wifi', 'ac'] },
 
-            // If user came from Index.html with a search, fill inputs and run search
-            if (fromParam && toParam) {
-                document.getElementById('inputFrom').value = fromParam;
-                document.getElementById('inputTo').value = toParam;
-                document.getElementById('pageTitle').innerText = `${fromParam} to ${toParam}`;
-                handleSearch(new Event('submit'), true); // Run search automatically (skip loading)
+            // Delhi -> Jaipur
+            { id: 13, from: 'Delhi', to: 'Jaipur', name: 'RSRTC Goldline', type: 'Government', sub: 'Scania/Volvo', dep: '20:00', arr: '01:30', price: 700, rate: 4.5, cat: 'comfort', status: 'ontime', am: ['ac', 'plug'] },
+            { id: 14, from: 'Delhi', to: 'Jaipur', name: 'NueGo', type: 'Private', sub: 'Electric AC', dep: '21:30', arr: '02:45', price: 650, rate: 4.6, cat: 'comfort', status: 'boarding', am: ['wifi', 'ac'] },
+            { id: 15, from: 'Delhi', to: 'Jaipur', name: 'Zingbus', type: 'Private', sub: 'AC Multi-Axle', dep: '22:00', arr: '03:15', price: 600, rate: 4.3, cat: 'budget', status: 'ontime', am: ['wifi', 'ac'] },
+            { id: 16, from: 'Delhi', to: 'Jaipur', name: 'Vikas Travels', type: 'Private', sub: 'Sleeper', dep: '21:00', arr: '03:00', price: 400, rate: 3.8, cat: 'budget', status: 'delayed', am: ['bed', 'ac'] },
+        ];
+
+        const icons = {
+            'wifi': '<i class="fas fa-wifi"></i>', 'ac': '<i class="fas fa-snowflake"></i>',
+            'plug': '<i class="fas fa-plug"></i>', 'bed': '<i class="fas fa-bed"></i>',
+            'water': '<i class="fas fa-tint"></i>', 'cctv': '<i class="fas fa-video"></i>'
+        };
+
+        let currentList = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set min date
+            document.getElementById('inputDate').valueAsDate = new Date();
+            
+            // Check URL params
+            const params = new URLSearchParams(window.location.search);
+            const from = params.get('from');
+            const to = params.get('to');
+            if (from && to) {
+                document.getElementById('inputFrom').value = from;
+                document.getElementById('inputTo').value = to;
+                performSearch(from, to);
             }
         });
 
-        // --- 2. Handle Search ---
-        function handleSearch(event, skipLoader = false) {
-            if(event) event.preventDefault();
-            
-            const loader = document.getElementById('loader');
-            const cards = document.querySelectorAll('.bus-card');
-            
-            if(!skipLoader) {
-                loader.style.display = 'flex';
-                cards.forEach(card => {
-                    card.style.display = 'none'; // Hide initially
-                    card.classList.remove('visible');
-                });
-
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                    cards.forEach(card => {
-                        card.style.display = 'block';
-                        card.classList.add('visible');
-                    });
-                }, 1000);
-            } else {
-                // Immediate show if skipLoader is true (coming from home page)
-                cards.forEach(card => {
-                    card.classList.add('visible');
-                });
-            }
+        function handleSearch(e) {
+            e.preventDefault();
+            const from = document.getElementById('inputFrom').value;
+            const to = document.getElementById('inputTo').value;
+            performSearch(from, to);
         }
 
-        // --- 3. Quick Route ---
         function quickRoute(from, to) {
             document.getElementById('inputFrom').value = from;
             document.getElementById('inputTo').value = to;
-            // Trigger search
-            handleSearch();
+            performSearch(from, to);
         }
 
-        // --- 4. Select Bus (Redirect to Seats) ---
-        function selectBus(name, price, type) {
+        function performSearch(from, to) {
+            document.getElementById('loader').style.display = 'flex';
+            document.getElementById('pageTitle').innerText = `${from} to ${to}`;
+            
+            setTimeout(() => {
+                const fromKey = from.toLowerCase();
+                const toKey = to.toLowerCase();
+                
+                currentList = buses.filter(b => 
+                    b.from.toLowerCase().includes(fromKey) && 
+                    b.to.toLowerCase().includes(toKey)
+                );
+
+                renderList(currentList);
+                showTips(fromKey, toKey);
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('filterSection').style.display = 'flex';
+            }, 800);
+        }
+
+        function renderList(list) {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '';
+            
+            if (list.length === 0) {
+                container.innerHTML = `<div class="text-center text-white mt-5"><h5>No buses found</h5></div>`;
+                return;
+            }
+
+            list.forEach((b, i) => {
+                const typeClass = b.type === 'Government' ? 'type-govt' : 'type-priv';
+                const statusClass = b.status === 'ontime' ? 'st-ontime' : 'st-delayed';
+                const statusText = b.status === 'ontime' ? 'On Time' : (b.status === 'delayed' ? 'Delayed 10m' : 'Boarding');
+                
+                const amIcons = b.am.map(x => icons[x]).join(' ');
+
+                const card = document.createElement('div');
+                card.className = 'bus-card';
+                card.style.animationDelay = `${i * 0.1}s`; // Staggered entry
+                card.onclick = () => selectBus(b.name, b.price, b.sub);
+                
+                card.innerHTML = `
+                    <div class="status-badge ${statusClass}">${statusText}</div>
+                    
+                    <div class="bus-info">
+                        <div class="bus-logo">
+                            <i class="fas fa-${b.sub.includes('Sleeper') ? 'bed' : 'bus-alt'}"></i>
+                        </div>
+                        <div class="bus-details">
+                            <div class="bus-name-row">
+                                <span class="bus-name">${b.name}</span>
+                                <span class="bus-type ${typeClass}">${b.type}</span>
+                            </div>
+                            <div class="bus-sub">${b.sub}</div>
+                            
+                            <div class="time-display">
+                                <div class="time-col"><span class="time-val">${b.dep}</span></div>
+                                <div class="dash-line"></div>
+                                <div class="time-col"><span class="dur-val">8h 30m</span></div>
+                                <div class="dash-line"></div>
+                                <div class="time-col"><span class="time-val">${b.arr}</span></div>
+                            </div>
+
+                            <div class="amenities-row">
+                                ${amIcons}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bus-action">
+                        <div class="rating-box"><i class="fas fa-star"></i> ${b.rate}</div>
+                        <div class="price-tag">₹${b.price}</div>
+                        <a href="#" class="btn-seat">View Seats <i class="fas fa-arrow-right ms-1 small"></i></a>
+                    </div>
+                `;
+                container.appendChild(card);
+                
+                // Trigger animation in next frame
+                setTimeout(() => card.classList.add('visible'), 50 + (i * 50));
+            });
+        }
+
+        function filterBuses(cat) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            let filtered = [];
+            if(cat === 'all') filtered = currentList;
+            else if(cat === 'comfort') filtered = currentList.filter(b => b.cat === 'comfort');
+            else if(cat === 'budget') filtered = currentList.filter(b => b.cat === 'budget');
+            
+            renderList(filtered);
+        }
+
+        function showTips(from, to) {
+            const tipsBox = document.getElementById('tipsSection');
+            const tipsList = document.getElementById('tipsList');
+            tipsBox.style.display = 'block';
+            
+            let tips = [];
+            if(from.includes('bangalore') && to.includes('kochi')) {
+                tips = ["<b>Reliability:</b> KSRTC Swift is safest on Ghats.", "<b>Comfort:</b> Try Kallada G4 Sleepers."];
+            } else if (from.includes('mumbai') && to.includes('pune')) {
+                tips = ["<b>Best:</b> MSRTC Shivneri runs every 15 mins.", "<b>Tip:</b> Purple Metrolink is great for daily passes."];
+            } else if (from.includes('delhi') && to.includes('jaipur')) {
+                tips = ["<b>Eco:</b> NueGo Electric buses are silent & smooth.", "<b>Tip:</b> RSRTC Goldline is highly punctual."];
+            } else {
+                tips = ["<b>General:</b> Govt buses rarely cancel.", "<b>Comfort:</b> Private buses offer live tracking."];
+            }
+            tipsList.innerHTML = tips.map(t => `<li>${t}</li>`).join('');
+        }
+
+        function selectBus(name, price, sub) {
             const from = document.getElementById('inputFrom').value;
             const to = document.getElementById('inputTo').value;
-
-            const targetUrl = `seats.html?name=${encodeURIComponent(name)}&price=${price}&isSleeper=${type === 'sleeper'}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
-            window.location.href = targetUrl;
+            const isSleeper = sub.toLowerCase().includes('sleeper');
+            window.location.href = `seats.html?name=${encodeURIComponent(name)}&price=${price}&isSleeper=${isSleeper}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
         }
     </script>
 </body>
