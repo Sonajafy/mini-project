@@ -23,7 +23,7 @@
             --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
             --shadow-hover: 0 20px 50px -12px rgba(0,0,0,0.15);
             --radius: 24px;
-            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smooth "Apple-like" easing */
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
         }
 
         body {
@@ -31,258 +31,150 @@
             background-color: #0F172A; /* Dark base for contrast */
             color: var(--text-main);
             margin: 0;
-            padding-bottom: 80px; /* Space for footer */
+            padding-bottom: 80px; 
             overflow-x: hidden;
         }
 
         /* --- Background Layers --- */
         .bg-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden;
         }
-
         .bg-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.4; /* Subtle background */
-            filter: blur(3px) brightness(0.8);
-            transform: scale(1.1); /* Prevents edge blur visibility */
+            width: 100%; height: 100%; object-fit: cover;
+            opacity: 0.4; filter: blur(3px) brightness(0.8);
+            transform: scale(1.1);
         }
 
         /* --- Header --- */
         .top-header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
-            padding: 16px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            padding: 16px 0; position: sticky; top: 0; z-index: 1000;
             box-shadow: 0 4px 20px rgba(0,0,0,0.03);
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-
         .brand-area { cursor: pointer; transition: var(--transition); }
         .brand-area:hover { opacity: 0.8; }
 
         /* --- Main Container --- */
         .main-content {
-            max-width: 900px; /* Restrict width for better readability */
-            margin: 0 auto;
-            padding-top: 30px;
-            position: relative;
-            z-index: 1;
+            max-width: 900px; 
+            margin: 0 auto; padding-top: 30px;
+            position: relative; z-index: 1;
         }
 
         /* --- Search Box --- */
         .search-container {
-            background: var(--glass-bg);
-            padding: 24px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-soft);
-            margin-bottom: 30px;
-            border: 1px solid var(--glass-border);
-            transform: translateY(0);
-            transition: var(--transition);
+            background: var(--glass-bg); padding: 24px;
+            border-radius: var(--radius); box-shadow: var(--shadow-soft);
+            margin-bottom: 30px; border: 1px solid var(--glass-border);
+            transform: translateY(0); transition: var(--transition);
         }
-        
-        /* Inputs */
         .form-input-modern {
-            width: 100%;
-            border: 2px solid transparent;
-            background: #F8FAFC;
-            padding: 16px 20px;
-            border-radius: 16px;
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--text-main);
-            transition: var(--transition);
+            width: 100%; border: 2px solid transparent; background: #F8FAFC;
+            padding: 16px 20px; border-radius: 16px; font-weight: 600;
+            font-size: 1rem; color: var(--text-main); transition: var(--transition);
         }
-        
         .form-input-modern:focus {
-            background: #fff;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 6px rgba(229, 57, 53, 0.05);
-            outline: none;
+            background: #fff; border-color: var(--primary);
+            box-shadow: 0 0 0 6px rgba(229, 57, 53, 0.05); outline: none;
         }
-
         .btn-search {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 16px 32px;
-            border-radius: 16px;
-            font-weight: 700;
-            width: 100%;
-            transition: var(--transition);
+            background: var(--primary); color: white; border: none;
+            padding: 16px 32px; border-radius: 16px; font-weight: 700;
+            width: 100%; transition: var(--transition);
             box-shadow: 0 4px 12px rgba(229, 57, 53, 0.25);
         }
         .btn-search:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
+            background: var(--primary-hover); transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(229, 57, 53, 0.35);
         }
 
         /* --- Popular Routes --- */
         .popular-tags {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            margin-bottom: 25px;
-            scrollbar-width: none; /* Firefox */
+            display: flex; gap: 10px; overflow-x: auto;
+            padding-bottom: 10px; margin-bottom: 25px; scrollbar-width: none;
         }
-        .popular-tags::-webkit-scrollbar { display: none; } /* Chrome */
-
+        .popular-tags::-webkit-scrollbar { display: none; }
         .tag-pill {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+            color: white; padding: 10px 20px; border-radius: 50px;
+            font-weight: 600; font-size: 0.9rem; white-space: nowrap;
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
             transition: var(--transition);
         }
-        .tag-pill:hover {
-            background: white;
-            color: var(--primary);
-            transform: translateY(-2px);
-        }
+        .tag-pill:hover { background: white; color: var(--primary); transform: translateY(-2px); }
 
         /* --- Tips Section --- */
         .tips-box {
             background: linear-gradient(135deg, #FFF7ED 0%, #FFFFFF 100%);
-            border-left: 4px solid #F97316;
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow-soft);
-            animation: fadeIn 0.5s ease-out;
+            border-left: 4px solid #F97316; padding: 20px;
+            border-radius: 16px; margin-bottom: 30px; box-shadow: var(--shadow-soft);
         }
         .tips-box h6 { color: #C2410C; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .tips-list li { font-size: 0.9rem; color: #475569; margin-bottom: 8px; display: flex; gap: 10px; }
         .tips-list li i { color: #F97316; margin-top: 3px; }
 
-        /* --- Filter Tabs --- */
+        /* --- Filter Tabs & Sort Bar --- */
+        .controls-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 24px; gap: 15px;
+        }
         .filters {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
+            display: flex; gap: 12px; flex-wrap: wrap;
         }
         .filter-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 10px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: white; padding: 10px 24px; border-radius: 50px;
+            font-weight: 600; cursor: pointer; transition: var(--transition);
         }
         .filter-btn.active, .filter-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
+            background: var(--primary); border-color: var(--primary);
             box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
         }
+        .sort-select {
+            background: white; border: none; padding: 10px 15px;
+            border-radius: 12px; font-weight: 600; color: var(--text-main);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer;
+        }
 
-        /* --- BUS CARD (The Core) --- */
-        /* Using Grid to ensure NO overlapping */
+        /* --- BUS CARD --- */
         .bus-card {
-            background: var(--glass-bg);
-            border-radius: var(--radius);
-            padding: 28px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(255,255,255,0.5);
-            transition: var(--transition);
-            cursor: pointer;
-            position: relative;
-            display: grid;
-            gap: 20px;
-            /* Default Grid: Info | Price */
+            background: var(--glass-bg); border-radius: var(--radius);
+            padding: 28px; margin-bottom: 20px; box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(255,255,255,0.5); transition: var(--transition);
+            cursor: pointer; position: relative; display: grid; gap: 20px;
             grid-template-columns: 1fr auto;
-            opacity: 0;
-            transform: translateY(20px);
+            opacity: 0; transform: translateY(20px);
         }
-
-        .bus-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+        .bus-card.visible { opacity: 1; transform: translateY(0); }
         .bus-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-hover);
+            transform: translateY(-6px); box-shadow: var(--shadow-hover);
             border-color: rgba(229, 57, 53, 0.3);
         }
 
-        /* Left Side: Info */
-        .bus-info {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 20px;
-            align-items: start;
-        }
-
+        .bus-info { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start; }
         .bus-logo {
-            width: 64px;
-            height: 64px;
-            background: #F1F5F9;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            color: var(--primary);
+            width: 64px; height: 64px; background: #F1F5F9; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; color: var(--primary);
         }
-
-        .bus-details {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
-        }
-
-        .bus-name-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
-            flex-wrap: wrap;
-        }
-
+        .bus-details { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+        .bus-name-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
         .bus-name { font-weight: 800; font-size: 1.15rem; color: var(--text-main); }
         .bus-type { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 10px; border-radius: 8px; }
         .type-govt { background: #E0F2FE; color: #0369A1; }
         .type-priv { background: #FEF3C7; color: #B45309; }
-
         .bus-sub { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px; }
 
-        /* Time Section (Center aligned in card on desktop, but inside bus-info on grid) */
         .time-display {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: #F8FAFC;
-            padding: 12px 20px;
-            border-radius: 16px;
-            width: fit-content;
-            margin-bottom: 12px;
+            display: flex; align-items: center; gap: 20px; background: #F8FAFC;
+            padding: 12px 20px; border-radius: 16px; width: fit-content; margin-bottom: 12px;
         }
-
         .time-col { text-align: center; }
         .time-val { font-size: 1.2rem; font-weight: 800; color: var(--text-main); display: block; line-height: 1.2; }
         .dur-val { font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; background: #E2E8F0; padding: 2px 8px; border-radius: 6px; }
-        
         .dash-line { height: 2px; width: 40px; background: #CBD5E1; position: relative; }
         .dash-line::after { content: '>'; position: absolute; right: -4px; top: -7px; color: #CBD5E1; font-size: 10px; font-weight: bold; }
 
@@ -292,86 +184,93 @@
 
         /* Right Side: Price & Action */
         .bus-action {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: flex-end;
-            padding-left: 20px;
-            border-left: 1px solid #E2E8F0;
-            min-width: 140px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            align-items: flex-end; padding-left: 20px;
+            border-left: 1px solid #E2E8F0; min-width: 140px;
         }
 
         .rating-box { font-size: 0.85rem; font-weight: 700; color: #F59E0B; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
         
-        .price-tag { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 15px; }
-        .price-tag span { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+        /* Price Styling */
+        .price-container { display: flex; flex-direction: column; align-items: flex-end; margin-bottom: 15px; }
+        .discount-tag {
+            background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA;
+            padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+            animation: pulse 2s infinite;
+        }
+        .original-price { font-size: 0.9rem; color: #94A3B8; text-decoration: line-through; font-weight: 500; }
+        .price-tag { font-size: 1.8rem; font-weight: 800; color: var(--text-main); line-height: 1; }
 
         .btn-seat {
-            background: var(--text-main);
-            color: white;
-            padding: 12px 28px;
-            border-radius: 50px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: var(--transition);
-            display: inline-block;
-            width: 100%;
-            text-align: center;
-            border: 2px solid var(--text-main);
+            background: var(--text-main); color: white; padding: 12px 28px;
+            border-radius: 50px; font-weight: 700; text-decoration: none;
+            transition: var(--transition); display: inline-block; width: 100%;
+            text-align: center; border: 2px solid var(--text-main);
         }
-
-        /* Hover State override for button */
         .bus-card:hover .btn-seat {
-            background: var(--primary);
-            border-color: var(--primary);
+            background: var(--primary); border-color: var(--primary);
             box-shadow: 0 10px 20px rgba(229, 57, 53, 0.3);
         }
 
-        /* Status Badge (Floating top right inside card) */
+        /* --- Sub-Bus / Variant Styling --- */
+        .variant-section {
+            grid-column: 1 / -1; /* Span full width */
+            border-top: 1px solid #E2E8F0;
+            padding-top: 15px;
+            margin-top: 10px;
+            animation: slideDown 0.3s ease-out;
+        }
+        .variant-title {
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+            color: var(--text-secondary); margin-bottom: 10px; letter-spacing: 1px;
+        }
+        .variant-row {
+            background: #F8FAFC; border-radius: 12px; padding: 12px 16px;
+            margin-bottom: 8px; display: flex; justify-content: space-between;
+            align-items: center; border: 1px solid transparent; transition: var(--transition);
+        }
+        .variant-row:hover {
+            border-color: var(--primary); background: white;
+            transform: translateX(5px);
+        }
+        .variant-info { display: flex; align-items: center; gap: 15px; }
+        .variant-type { font-weight: 700; color: var(--text-main); }
+        .variant-price { font-weight: 800; color: var(--text-main); }
+        .variant-btn {
+            background: white; color: var(--text-main); border: 1px solid #CBD5E1;
+            padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+        }
+        .variant-row:hover .variant-btn {
+            background: var(--primary); color: white; border-color: var(--primary);
+        }
+
+        /* Status Badge */
         .status-badge {
-            position: absolute;
-            top: 24px;
-            right: 24px; /* Positioned inside right side usually, but here floating */
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 6px 14px;
-            border-radius: 8px;
-            z-index: 2;
-            opacity: 0.9;
+            position: absolute; top: 24px; right: 24px;
+            font-size: 0.75rem; font-weight: 700; padding: 6px 14px;
+            border-radius: 8px; z-index: 2; opacity: 0.9;
         }
         .st-ontime { background: #DCFCE7; color: #166534; }
         .st-delayed { background: #FEF9C3; color: #854D0E; }
+        .st-boarding { background: #DBEAFE; color: #1E40AF; }
 
         /* --- Responsive Logic (Mobile) --- */
         @media (max-width: 768px) {
-            .bus-card {
-                /* Stack everything vertically on mobile */
-                grid-template-columns: 1fr;
-                gap: 20px;
-                padding: 20px;
-            }
-
-            .bus-info {
-                grid-template-columns: auto 1fr;
-                gap: 15px;
-            }
-
+            .bus-card { grid-template-columns: 1fr; gap: 20px; padding: 20px; }
+            .bus-info { grid-template-columns: auto 1fr; gap: 15px; }
             .bus-action {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                border-left: none;
-                border-top: 1px solid #E2E8F0;
-                padding-left: 0;
-                padding-top: 15px;
-                min-width: 100%;
+                flex-direction: row; justify-content: space-between; align-items: center;
+                border-left: none; border-top: 1px solid #E2E8F0;
+                padding-left: 0; padding-top: 15px; min-width: 100%;
             }
-
-            .price-tag { font-size: 1.4rem; margin-bottom: 0; }
+            .price-container { align-items: flex-start; margin-bottom: 0; }
+            .price-tag { font-size: 1.4rem; }
             .btn-seat { padding: 10px 20px; width: auto; font-size: 0.9rem; }
-            
             .time-display { width: 100%; justify-content: space-between; }
             .dash-line { width: 100%; }
+            .controls-bar { flex-direction: column; align-items: flex-start; }
+            .filters { width: 100%; overflow-x: auto; flex-wrap: nowrap; }
         }
 
         /* --- Loader --- */
@@ -381,15 +280,14 @@
             z-index: 2000; display: none; align-items: center; justify-content: center; flex-direction: column;
         }
         .spinner {
-            width: 60px; height: 60px;
-            border: 5px solid rgba(229, 57, 53, 0.1);
-            border-left-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 20px;
+            width: 60px; height: 60px; border: 5px solid rgba(229, 57, 53, 0.1);
+            border-left-color: var(--primary); border-radius: 50%;
+            animation: spin 0.8s linear infinite; margin-bottom: 20px;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
     </style>
 </head>
@@ -458,11 +356,19 @@
             <ul class="list-unstyled tips-list" id="tipsList"></ul>
         </div>
 
-        <!-- Filters -->
-        <div id="filterSection" class="filters" style="display: none;">
-            <div class="filter-btn active" onclick="filterBuses('all')">All</div>
-            <div class="filter-btn" onclick="filterBuses('comfort')">Premium</div>
-            <div class="filter-btn" onclick="filterBuses('budget')">Budget</div>
+        <!-- Controls (Filters & Sort) -->
+        <div id="controlsSection" class="controls-bar" style="display: none;">
+            <div class="filters">
+                <div class="filter-btn active" onclick="filterBuses('all')">All</div>
+                <div class="filter-btn" onclick="filterBuses('comfort')">Premium</div>
+                <div class="filter-btn" onclick="filterBuses('budget')">Budget</div>
+                <div class="filter-btn" onclick="filterBuses('ac')">A/C Only</div>
+            </div>
+            <select id="sortSelect" class="sort-select" onchange="handleSort()">
+                <option value="dep">Sort: Departure</option>
+                <option value="priceLow">Sort: Price (Low)</option>
+                <option value="rating">Sort: Rating</option>
+            </select>
         </div>
 
         <!-- Bus List -->
@@ -479,31 +385,47 @@
     </div>
 
     <script>
-        // --- DATA ---
+        // --- DATA (Expanded with Variants and Timeframes) ---
         const buses = [
             // Bangalore -> Kochi
-            { id: 1, from: 'Bangalore', to: 'Kochi', name: 'KSRTC Swift', type: 'Government', sub: 'Multi-Axle Volvo', dep: '22:00', arr: '08:30', price: 1150, rate: 4.6, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac', 'plug'] },
-            { id: 2, from: 'Bangalore', to: 'Kochi', name: 'Kallada Travels', type: 'Private', sub: 'G4 Sleeper', dep: '21:30', arr: '07:45', price: 1450, rate: 4.2, cat: 'comfort', status: 'ontime', am: ['bed', 'ac', 'plug'] },
-            { id: 3, from: 'Bangalore', to: 'Kochi', name: 'GreenLine Travels', type: 'Private', sub: 'A/C Sleeper', dep: '22:30', arr: '09:15', price: 1050, rate: 4.4, cat: 'comfort', status: 'ontime', am: ['bed', 'ac', 'water'] },
-            { id: 4, from: 'Bangalore', to: 'Kochi', name: 'Jabbar Travels', type: 'Private', sub: 'Multi-Axle', dep: '20:45', arr: '07:30', price: 950, rate: 3.9, cat: 'budget', status: 'delayed', am: ['ac', 'plug'] },
+            { id: 1, from: 'Bangalore', to: 'Kochi', name: 'KSRTC Swift', type: 'Government', sub: 'Multi-Axle Volvo', dep: '16:00', arr: '02:30', price: 1150, rate: 4.6, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac', 'plug'] },
+            { id: 2, from: 'Bangalore', to: 'Kochi', name: 'KSRTC Swift', type: 'Government', sub: 'G4 Sleeper', dep: '16:00', arr: '02:45', price: 1450, rate: 4.5, cat: 'comfort', status: 'ontime', am: ['bed', 'ac', 'water'] },
+            { id: 3, from: 'Bangalore', to: 'Kochi', name: 'Kallada Travels', type: 'Private', sub: 'A/C Multi-Axle', dep: '17:30', arr: '03:15', price: 1200, rate: 4.2, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac', 'plug'] },
+            { id: 4, from: 'Bangalore', to: 'Kochi', name: 'Kallada Travels', type: 'Private', sub: 'Sleeper', dep: '17:30', arr: '03:30', price: 1500, rate: 4.1, cat: 'comfort', status: 'ontime', am: ['bed', 'ac', 'water'] },
+            { id: 5, from: 'Bangalore', to: 'Kochi', name: 'GreenLine Travels', type: 'Private', sub: 'A/C Seater', dep: '18:45', arr: '04:30', price: 900, rate: 4.4, cat: 'budget', status: 'ontime', am: ['ac', 'water'] },
+            { id: 6, from: 'Bangalore', to: 'Kochi', name: 'GreenLine Travels', type: 'Private', sub: 'Semi-Sleeper', dep: '18:45', arr: '04:45', price: 1100, rate: 4.3, cat: 'comfort', status: 'ontime', am: ['ac', 'plug'] },
+            { id: 7, from: 'Bangalore', to: 'Kochi', name: 'Jabbar Travels', type: 'Private', sub: 'Non-A/C Seater', dep: '20:00', arr: '06:00', price: 650, rate: 3.9, cat: 'budget', status: 'delayed', am: ['water'] },
+            { id: 8, from: 'Bangalore', to: 'Kochi', name: 'Jabbar Travels', type: 'Private', sub: 'A/C Seater', dep: '20:00', arr: '05:45', price: 950, rate: 3.9, cat: 'budget', status: 'delayed', am: ['ac'] },
             
             // Bangalore -> Chennai
-            { id: 5, from: 'Bangalore', to: 'Chennai', name: 'KSRTC Airavat', type: 'Government', sub: 'Club Class', dep: '22:00', arr: '03:30', price: 850, rate: 4.7, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac', 'plug'] },
-            { id: 6, from: 'Bangalore', to: 'Chennai', name: 'National Travels', type: 'Private', sub: 'Non-Stop Volvo', dep: '23:15', arr: '04:30', price: 900, rate: 4.1, cat: 'comfort', status: 'ontime', am: ['ac', 'water'] },
-            { id: 7, from: 'Bangalore', to: 'Chennai', name: 'Parveen Travels', type: 'Private', sub: 'Business Class', dep: '21:00', arr: '02:30', price: 950, rate: 4.3, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac'] },
-            { id: 8, from: 'Bangalore', to: 'Chennai', name: 'Asian Xpress', type: 'Private', sub: 'Multi-Axle', dep: '22:45', arr: '04:15', price: 700, rate: 3.8, cat: 'budget', status: 'ontime', am: ['ac'] },
+            { id: 9, from: 'Bangalore', to: 'Chennai', name: 'KSRTC Airavat', type: 'Government', sub: 'Club Class', dep: '19:00', arr: '00:30', price: 850, rate: 4.7, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac', 'plug'] },
+            { id: 10, from: 'Bangalore', to: 'Chennai', name: 'KSRTC Airavat', type: 'Government', sub: 'Sleeper', dep: '19:00', arr: '00:45', price: 1100, rate: 4.6, cat: 'comfort', status: 'ontime', am: ['bed', 'ac', 'plug'] },
+            { id: 11, from: 'Bangalore', to: 'Chennai', name: 'National Travels', type: 'Private', sub: 'Non-Stop Volvo', dep: '21:00', arr: '02:15', price: 900, rate: 4.1, cat: 'comfort', status: 'ontime', am: ['ac', 'water'] },
+            { id: 12, from: 'Bangalore', to: 'Chennai', name: 'Parveen Travels', type: 'Private', sub: 'Business Class', dep: '22:00', arr: '03:30', price: 950, rate: 4.3, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac'] },
+            { id: 13, from: 'Bangalore', to: 'Chennai', name: 'Asian Xpress', type: 'Private', sub: 'A/C Seater', dep: '23:00', arr: '04:30', price: 700, rate: 3.8, cat: 'budget', status: 'ontime', am: ['ac'] },
+            { id: 14, from: 'Bangalore', to: 'Chennai', name: 'Asian Xpress', type: 'Private', sub: 'Sleeper', dep: '23:00', arr: '05:00', price: 950, rate: 3.7, cat: 'budget', status: 'ontime', am: ['bed', 'ac'] },
 
-            // Mumbai -> Pune
-            { id: 9, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '18:00', arr: '19:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
-            { id: 10, from: 'Mumbai', to: 'Pune', name: 'Neeta Travels', type: 'Private', sub: 'Luxury Coach', dep: '17:30', arr: '19:15', price: 400, rate: 4.0, cat: 'comfort', status: 'ontime', am: ['ac', 'water'] },
-            { id: 11, from: 'Mumbai', to: 'Pune', name: 'Purple Metrolink', type: 'Private', sub: 'AC Seater', dep: '18:15', arr: '20:00', price: 350, rate: 4.2, cat: 'comfort', status: 'boarding', am: ['ac'] },
-            { id: 12, from: 'Mumbai', to: 'Pune', name: 'Zingbus', type: 'Private', sub: 'Prime AC', dep: '18:30', arr: '20:30', price: 250, rate: 4.4, cat: 'budget', status: 'ontime', am: ['wifi', 'ac'] },
+            // Mumbai -> Pune (High Frequency)
+            { id: 15, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '13:00', arr: '17:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
+            { id: 16, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '14:00', arr: '18:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
+            { id: 17, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '15:00', arr: '19:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
+            { id: 18, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '16:00', arr: '20:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
+            { id: 19, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '17:00', arr: '21:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
+            { id: 20, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '18:00', arr: '22:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
+            { id: 21, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '19:00', arr: '23:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
+            { id: 22, from: 'Mumbai', to: 'Pune', name: 'Neeta Travels', type: 'Private', sub: 'Luxury Coach', dep: '16:15', arr: '19:00', price: 400, rate: 4.0, cat: 'comfort', status: 'ontime', am: ['ac', 'water'] },
+            { id: 23, from: 'Mumbai', to: 'Pune', name: 'Neeta Travels', type: 'Private', sub: 'Sleeper', dep: '16:15', arr: '19:15', price: 550, rate: 4.1, cat: 'comfort', status: 'ontime', am: ['bed', 'ac'] },
+            { id: 24, from: 'Mumbai', to: 'Pune', name: 'Purple Metrolink', type: 'Private', sub: 'AC Seater', dep: '17:30', arr: '20:30', price: 375, rate: 4.2, cat: 'comfort', status: 'boarding', am: ['ac'] },
+            { id: 25, from: 'Mumbai', to: 'Pune', name: 'Purple Metrolink', type: 'Private', sub: 'Semi-Sleeper', dep: '17:30', arr: '20:45', price: 450, rate: 4.2, cat: 'comfort', status: 'boarding', am: ['ac', 'plug'] },
 
-            // Delhi -> Jaipur
-            { id: 13, from: 'Delhi', to: 'Jaipur', name: 'RSRTC Goldline', type: 'Government', sub: 'Scania/Volvo', dep: '20:00', arr: '01:30', price: 700, rate: 4.5, cat: 'comfort', status: 'ontime', am: ['ac', 'plug'] },
-            { id: 14, from: 'Delhi', to: 'Jaipur', name: 'NueGo', type: 'Private', sub: 'Electric AC', dep: '21:30', arr: '02:45', price: 650, rate: 4.6, cat: 'comfort', status: 'boarding', am: ['wifi', 'ac'] },
-            { id: 15, from: 'Delhi', to: 'Jaipur', name: 'Zingbus', type: 'Private', sub: 'AC Multi-Axle', dep: '22:00', arr: '03:15', price: 600, rate: 4.3, cat: 'budget', status: 'ontime', am: ['wifi', 'ac'] },
-            { id: 16, from: 'Delhi', to: 'Jaipur', name: 'Vikas Travels', type: 'Private', sub: 'Sleeper', dep: '21:00', arr: '03:00', price: 400, rate: 3.8, cat: 'budget', status: 'delayed', am: ['bed', 'ac'] },
+            // Delhi -> Jaipur (High Frequency)
+            { id: 26, from: 'Delhi', to: 'Jaipur', name: 'RSRTC Goldline', type: 'Government', sub: 'Scania/Volvo', dep: '18:00', arr: '23:30', price: 700, rate: 4.5, cat: 'comfort', status: 'ontime', am: ['ac', 'plug'] },
+            { id: 27, from: 'Delhi', to: 'Jaipur', name: 'RSRTC Goldline', type: 'Government', sub: 'Sleeper', dep: '18:00', arr: '00:00', price: 900, rate: 4.5, cat: 'comfort', status: 'ontime', am: ['bed', 'ac'] },
+            { id: 28, from: 'Delhi', to: 'Jaipur', name: 'NueGo', type: 'Private', sub: 'Electric AC', dep: '19:00', arr: '00:15', price: 650, rate: 4.6, cat: 'comfort', status: 'boarding', am: ['wifi', 'ac'] },
+            { id: 29, from: 'Delhi', to: 'Jaipur', name: 'NueGo', type: 'Private', sub: 'Electric AC', dep: '20:00', arr: '01:15', price: 650, rate: 4.6, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac'] },
+            { id: 30, from: 'Delhi', to: 'Jaipur', name: 'Zingbus', type: 'Private', sub: 'AC Multi-Axle', dep: '21:00', arr: '02:15', price: 600, rate: 4.3, cat: 'budget', status: 'ontime', am: ['wifi', 'ac'] },
+            { id: 31, from: 'Delhi', to: 'Jaipur', name: 'Zingbus', type: 'Private', sub: 'Sleeper', dep: '21:00', arr: '02:45', price: 800, rate: 4.3, cat: 'budget', status: 'ontime', am: ['bed', 'ac'] },
+            { id: 32, from: 'Delhi', to: 'Jaipur', name: 'Vikas Travels', type: 'Private', sub: 'Sleeper', dep: '22:00', arr: '04:00', price: 400, rate: 3.8, cat: 'budget', status: 'delayed', am: ['bed', 'ac'] },
         ];
 
         const icons = {
@@ -513,12 +435,11 @@
         };
 
         let currentList = [];
+        let sortedList = [];
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Set min date
             document.getElementById('inputDate').valueAsDate = new Date();
             
-            // Check URL params
             const params = new URLSearchParams(window.location.search);
             const from = params.get('from');
             const to = params.get('to');
@@ -528,6 +449,86 @@
                 performSearch(from, to);
             }
         });
+
+        // --- HELPER: Calculate Dynamic Duration ---
+        function getDuration(dep, arr) {
+            let [dh, dm] = dep.split(':').map(Number);
+            let [ah, am] = arr.split(':').map(Number);
+            let depMins = dh * 60 + dm;
+            let arrMins = ah * 60 + am;
+            if (arrMins < depMins) arrMins += 24 * 60;
+            let diff = arrMins - depMins;
+            let hours = Math.floor(diff / 60);
+            let mins = diff % 60;
+            return `${hours}h ${mins}m`;
+        }
+
+        // --- HELPER: Apply Random Discounts & Tweak Times ---
+        function processBuses(list) {
+            let processed = JSON.parse(JSON.stringify(list));
+
+            // 1. Tweak Times (-5 to +5 mins)
+            processed.forEach(b => {
+                const addMins = (time, mins) => {
+                    let [h, m] = time.split(':').map(Number);
+                    let total = h * 60 + m + mins;
+                    let newH = Math.floor(total / 60) % 24;
+                    let newM = total % 60;
+                    return `${String(newH).padStart(2,'0')}:${String(newM).padStart(2,'0')}`;
+                };
+                let drift = Math.floor(Math.random() * 11) - 5;
+                if(drift !== 0) {
+                    b.dep = addMins(b.dep, drift);
+                    b.arr = addMins(b.arr, drift);
+                }
+            });
+
+            // 2. Random Discounts (Max 2 per list)
+            let indices = [...Array(processed.length).keys()];
+            indices.sort(() => Math.random() - 0.5);
+            let appliedCount = 0;
+            indices.forEach(i => {
+                if(appliedCount >= 2) return;
+                if(Math.random() > 0.4) {
+                    let isPercent = Math.random() > 0.5;
+                    let val = isPercent 
+                        ? (Math.floor(Math.random() * 3) + 1) * 5 
+                        : Math.floor(Math.random() * 100) + 50;
+                    processed[i].discount = {
+                        type: isPercent ? 'percent' : 'flat',
+                        val: val, text: isPercent ? `${val}% OFF` : `₹${val} OFF`
+                    };
+                    appliedCount++;
+                }
+            });
+            return processed;
+        }
+
+        // --- HELPER: Group Buses (Main + Sub Variants) ---
+        function groupBuses(list) {
+            const groups = {};
+            list.forEach(bus => {
+                // Create a unique key based on From, To, Name, and Departure Time
+                // This groups variants (Sleeper/Seater) under one master card
+                const key = `${bus.from}-${bus.to}-${bus.name}-${bus.dep}`;
+                
+                if (!groups[key]) {
+                    groups[key] = { main: bus, variants: [] };
+                } else {
+                    // If it's a variant, add it to the variants array
+                    // We determine "main" as the cheapest option usually
+                    if (bus.price < groups[key].main.price) {
+                        // Swap if new bus is cheaper
+                        let temp = groups[key].main;
+                        groups[key].main = bus;
+                        groups[key].variants.push(temp);
+                    } else {
+                        groups[key].variants.push(bus);
+                    }
+                }
+            });
+            return Object.values(groups);
+        }
 
         function handleSearch(e) {
             e.preventDefault();
@@ -550,16 +551,39 @@
                 const fromKey = from.toLowerCase();
                 const toKey = to.toLowerCase();
                 
-                currentList = buses.filter(b => 
+                let filtered = buses.filter(b => 
                     b.from.toLowerCase().includes(fromKey) && 
                     b.to.toLowerCase().includes(toKey)
                 );
 
-                renderList(currentList);
+                // Apply Discounts & Tweaks
+                currentList = processBuses(filtered);
+                
+                // Sort Default (Departure)
+                currentList.sort((a, b) => a.dep.localeCompare(b.dep));
+                sortedList = [...currentList]; // Keep reference for sorting
+
+                renderList(sortedList);
                 showTips(fromKey, toKey);
                 document.getElementById('loader').style.display = 'none';
-                document.getElementById('filterSection').style.display = 'flex';
+                document.getElementById('controlsSection').style.display = 'flex';
             }, 800);
+        }
+
+        function handleSort() {
+            const val = document.getElementById('sortSelect').value;
+            if(val === 'dep') {
+                currentList.sort((a, b) => a.dep.localeCompare(b.dep));
+            } else if (val === 'priceLow') {
+                currentList.sort((a, b) => {
+                    let priceA = a.discount ? (a.discount.type === 'percent' ? a.price*(1-a.discount.val/100) : a.price-a.discount.val) : a.price;
+                    let priceB = b.discount ? (b.discount.type === 'percent' ? b.price*(1-b.discount.val/100) : b.price-b.discount.val) : b.price;
+                    return priceA - priceB;
+                });
+            } else if (val === 'rating') {
+                currentList.sort((a, b) => b.rate - a.rate);
+            }
+            renderList(currentList);
         }
 
         function renderList(list) {
@@ -571,19 +595,32 @@
                 return;
             }
 
-            list.forEach((b, i) => {
+            // 1. Group the buses
+            const groupedData = groupBuses(list);
+
+            groupedData.forEach((group, i) => {
+                const b = group.main;
                 const typeClass = b.type === 'Government' ? 'type-govt' : 'type-priv';
-                const statusClass = b.status === 'ontime' ? 'st-ontime' : 'st-delayed';
-                const statusText = b.status === 'ontime' ? 'On Time' : (b.status === 'delayed' ? 'Delayed 10m' : 'Boarding');
+                const statusClass = b.status === 'ontime' ? 'st-ontime' : (b.status === 'boarding' ? 'st-boarding' : 'st-delayed');
+                const statusText = b.status === 'ontime' ? 'On Time' : (b.status === 'boarding' ? 'Boarding' : 'Delayed 10m');
+                const duration = getDuration(b.dep, b.arr);
                 
+                let priceHtml = '';
+                let displayPrice = b.price;
+                if (b.discount) {
+                    if(b.discount.type === 'percent') displayPrice = Math.round(b.price * (1 - (b.discount.val/100)));
+                    else displayPrice = b.price - b.discount.val;
+                    priceHtml = `<div class="discount-tag">${b.discount.text}</div><span class="original-price">₹${b.price}</span>`;
+                }
+
                 const amIcons = b.am.map(x => icons[x]).join(' ');
 
                 const card = document.createElement('div');
                 card.className = 'bus-card';
-                card.style.animationDelay = `${i * 0.1}s`; // Staggered entry
-                card.onclick = () => selectBus(b.name, b.price, b.sub);
+                card.style.animationDelay = `${i * 0.1}s`;
                 
-                card.innerHTML = `
+                // Card HTML
+                let html = `
                     <div class="status-badge ${statusClass}">${statusText}</div>
                     
                     <div class="bus-info">
@@ -600,7 +637,7 @@
                             <div class="time-display">
                                 <div class="time-col"><span class="time-val">${b.dep}</span></div>
                                 <div class="dash-line"></div>
-                                <div class="time-col"><span class="dur-val">8h 30m</span></div>
+                                <div class="time-col"><span class="dur-val">${duration}</span></div>
                                 <div class="dash-line"></div>
                                 <div class="time-col"><span class="time-val">${b.arr}</span></div>
                             </div>
@@ -613,13 +650,47 @@
 
                     <div class="bus-action">
                         <div class="rating-box"><i class="fas fa-star"></i> ${b.rate}</div>
-                        <div class="price-tag">₹${b.price}</div>
+                        <div class="price-container">
+                            ${priceHtml}
+                            <div class="price-tag">₹${displayPrice}</div>
+                        </div>
                         <a href="#" class="btn-seat">View Seats <i class="fas fa-arrow-right ms-1 small"></i></a>
                     </div>
                 `;
+
+                // 2. Add Variants Section if they exist
+                if (group.variants.length > 0) {
+                    html += `<div class="variant-section"><div class="variant-title">Other variants available</div>`;
+                    group.variants.forEach(v => {
+                        let vDisplayPrice = v.price;
+                        if(v.discount) {
+                            vDisplayPrice = v.discount.type === 'percent' ? Math.round(v.price * (1 - (v.discount.val/100))) : v.price - v.discount.val;
+                        }
+                        html += `
+                            <div class="variant-row" onclick="selectBus('${v.name}', ${vDisplayPrice}, '${v.sub}')">
+                                <div class="variant-info">
+                                    <div class="variant-type">${v.sub}</div>
+                                    <div style="font-size:0.75rem; color:#94A3B8">${v.am.includes('ac') ? '<i class="fas fa-snowflake"></i>' : ''} ${v.am.includes('wifi') ? '<i class="fas fa-wifi"></i>' : ''}</div>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:10px;">
+                                    <div class="variant-price">₹${vDisplayPrice}</div>
+                                    <button class="variant-btn">Book</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+
+                card.innerHTML = html;
+                card.onclick = (e) => {
+                    // Only trigger main click if not on a variant row
+                    if(!e.target.closest('.variant-section')) {
+                        selectBus(b.name, displayPrice, b.sub);
+                    }
+                };
+
                 container.appendChild(card);
-                
-                // Trigger animation in next frame
                 setTimeout(() => card.classList.add('visible'), 50 + (i * 50));
             });
         }
@@ -629,9 +700,10 @@
             event.target.classList.add('active');
             
             let filtered = [];
-            if(cat === 'all') filtered = currentList;
+            if(cat === 'all') filtered = [...currentList]; // Clone current state
             else if(cat === 'comfort') filtered = currentList.filter(b => b.cat === 'comfort');
             else if(cat === 'budget') filtered = currentList.filter(b => b.cat === 'budget');
+            else if(cat === 'ac') filtered = currentList.filter(b => b.am.includes('ac'));
             
             renderList(filtered);
         }
