@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     bus_id INT,
     seat_id INT,
     booking_date DATE,
+    travel_date DATE,   
     status ENUM('BOOKED','CANCELLED') DEFAULT 'BOOKED',
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (bus_id) REFERENCES buses(bus_id),

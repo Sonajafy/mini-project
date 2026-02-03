@@ -9,11 +9,11 @@ SET is_available = FALSE
 WHERE seat_id = 2;
 
 -- 3. Insert a new booking
-INSERT INTO bookings (user_id, bus_id, seat_id, booking_date, status)
-VALUES (1, 1, 2, '2026-01-02', 'BOOKED');
+INSERT INTO bookings (user_id, bus_id, seat_id, travel_date, booking_date, status)
+VALUES (1, 1, 2, '2026-01-10', '2026-01-02', 'BOOKED');
 
 -- 4. Join booking history with user and payment
-SELECT u.name, b.booking_id, bus.bus_number, p.amount, b.status
+SELECT u.name, b.booking_id, bus.bus_number, b.travel_date, p.amount, b.status
 FROM bookings b
 JOIN users u ON b.user_id = u.user_id
 JOIN buses bus ON b.bus_id = bus.bus_id
