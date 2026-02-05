@@ -1,3 +1,54 @@
+<?php
+include 'includes/db.php';
+
+// Initialize array
+$busData = [];
+
+// Check if search parameters exist
+$searchFrom = $_GET['from'] ?? '';
+$searchTo = $_GET['to'] ?? '';
+
+if ($searchFrom && $searchTo) {
+    // JOIN buses and routes tables
+    $sql = "SELECT b.bus_id, b.bus_number, b.bus_type, b.departure_time, b.arrival_time, 
+                   r.source, r.destination, r.distance_km
+            FROM buses b
+            JOIN routes r ON b.route_id = r.route_id
+            WHERE r.source LIKE ? AND r.destination LIKE ?";
+            
+    $termFrom = "%" . $searchFrom . "%";
+    $termTo = "%" . $searchTo . "%";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $termFrom, $termTo);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    while ($row = $result->fetch_assoc()) {
+        // Calculate a dummy price based on distance (since price isn't in your DB)
+        $price = $row['distance_km'] * 2; // e.g., 2 rupees per km
+        
+        // Map DB columns to your Frontend JS keys
+        $busData[] = [
+            'id' => $row['bus_id'],
+            'from' => $row['source'],
+            'to' => $row['destination'],
+            'name' => 'SmartBus ' . $row['bus_number'], // Using bus number as name
+            'type' => 'Private', // Default value
+            'sub' => $row['bus_type'], // e.g., 'AC', 'SLEEPER'
+            'dep' => substr($row['departure_time'], 0, 5), // HH:MM
+            'arr' => substr($row['arrival_time'], 0, 5),   // HH:MM
+            'price' => $price,
+            'rate' => 4.5, // Default rating
+            'cat' => ($row['bus_type'] == 'AC') ? 'comfort' : 'budget',
+            'status' => 'ontime',
+            'am' => ['ac', 'wifi'] // Default amenities
+        ];
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -318,19 +369,19 @@
         
         <!-- Search Form -->
         <div class="search-container">
-            <form id="searchForm" onsubmit="handleSearch(event)">
+            <form id="searchForm" action="search.php" method="GET">
                 <div class="row g-3">
                     <div class="col-md-3 col-6">
                         <label class="small text-muted fw-bold mb-2">FROM</label>
-                        <input type="text" id="inputFrom" class="form-input-modern" placeholder="City (e.g. Blr)" required>
+                        <input type="text" name="from" id="inputFrom" class="form-input-modern" placeholder="City (e.g. Blr)" required>
                     </div>
                     <div class="col-md-3 col-6">
                         <label class="small text-muted fw-bold mb-2">TO</label>
-                        <input type="text" id="inputTo" class="form-input-modern" placeholder="City (e.g. Kochi)" required>
+                        <input type="text" name="to" id="inputTo" class="form-input-modern" placeholder="City (e.g. Kochi)" required>
                     </div>
                     <div class="col-md-4 col-6">
                         <label class="small text-muted fw-bold mb-2">DATE</label>
-                        <input type="date" id="inputDate" class="form-input-modern" required>
+                        <input type="date" name="date" id="inputDate" class="form-input-modern" required>
                     </div>
                     <div class="col-md-2 col-6 d-flex align-items-end">
                         <button type="submit" class="btn-search">
@@ -386,47 +437,11 @@
 
     <script>
         // --- DATA (Expanded with Variants and Timeframes) ---
-        const buses = [
-            // Bangalore -> Kochi
-            { id: 1, from: 'Bangalore', to: 'Kochi', name: 'KSRTC Swift', type: 'Government', sub: 'Multi-Axle Volvo', dep: '16:00', arr: '02:30', price: 1150, rate: 4.6, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac', 'plug'] },
-            { id: 2, from: 'Bangalore', to: 'Kochi', name: 'KSRTC Swift', type: 'Government', sub: 'G4 Sleeper', dep: '16:00', arr: '02:45', price: 1450, rate: 4.5, cat: 'comfort', status: 'ontime', am: ['bed', 'ac', 'water'] },
-            { id: 3, from: 'Bangalore', to: 'Kochi', name: 'Kallada Travels', type: 'Private', sub: 'A/C Multi-Axle', dep: '17:30', arr: '03:15', price: 1200, rate: 4.2, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac', 'plug'] },
-            { id: 4, from: 'Bangalore', to: 'Kochi', name: 'Kallada Travels', type: 'Private', sub: 'Sleeper', dep: '17:30', arr: '03:30', price: 1500, rate: 4.1, cat: 'comfort', status: 'ontime', am: ['bed', 'ac', 'water'] },
-            { id: 5, from: 'Bangalore', to: 'Kochi', name: 'GreenLine Travels', type: 'Private', sub: 'A/C Seater', dep: '18:45', arr: '04:30', price: 900, rate: 4.4, cat: 'budget', status: 'ontime', am: ['ac', 'water'] },
-            { id: 6, from: 'Bangalore', to: 'Kochi', name: 'GreenLine Travels', type: 'Private', sub: 'Semi-Sleeper', dep: '18:45', arr: '04:45', price: 1100, rate: 4.3, cat: 'comfort', status: 'ontime', am: ['ac', 'plug'] },
-            { id: 7, from: 'Bangalore', to: 'Kochi', name: 'Jabbar Travels', type: 'Private', sub: 'Non-A/C Seater', dep: '20:00', arr: '06:00', price: 650, rate: 3.9, cat: 'budget', status: 'delayed', am: ['water'] },
-            { id: 8, from: 'Bangalore', to: 'Kochi', name: 'Jabbar Travels', type: 'Private', sub: 'A/C Seater', dep: '20:00', arr: '05:45', price: 950, rate: 3.9, cat: 'budget', status: 'delayed', am: ['ac'] },
-            
-            // Bangalore -> Chennai
-            { id: 9, from: 'Bangalore', to: 'Chennai', name: 'KSRTC Airavat', type: 'Government', sub: 'Club Class', dep: '19:00', arr: '00:30', price: 850, rate: 4.7, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac', 'plug'] },
-            { id: 10, from: 'Bangalore', to: 'Chennai', name: 'KSRTC Airavat', type: 'Government', sub: 'Sleeper', dep: '19:00', arr: '00:45', price: 1100, rate: 4.6, cat: 'comfort', status: 'ontime', am: ['bed', 'ac', 'plug'] },
-            { id: 11, from: 'Bangalore', to: 'Chennai', name: 'National Travels', type: 'Private', sub: 'Non-Stop Volvo', dep: '21:00', arr: '02:15', price: 900, rate: 4.1, cat: 'comfort', status: 'ontime', am: ['ac', 'water'] },
-            { id: 12, from: 'Bangalore', to: 'Chennai', name: 'Parveen Travels', type: 'Private', sub: 'Business Class', dep: '22:00', arr: '03:30', price: 950, rate: 4.3, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac'] },
-            { id: 13, from: 'Bangalore', to: 'Chennai', name: 'Asian Xpress', type: 'Private', sub: 'A/C Seater', dep: '23:00', arr: '04:30', price: 700, rate: 3.8, cat: 'budget', status: 'ontime', am: ['ac'] },
-            { id: 14, from: 'Bangalore', to: 'Chennai', name: 'Asian Xpress', type: 'Private', sub: 'Sleeper', dep: '23:00', arr: '05:00', price: 950, rate: 3.7, cat: 'budget', status: 'ontime', am: ['bed', 'ac'] },
+        const buses = <?php echo json_encode($busData); ?>;
 
-            // Mumbai -> Pune (High Frequency)
-            { id: 15, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '13:00', arr: '17:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
-            { id: 16, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '14:00', arr: '18:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
-            { id: 17, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '15:00', arr: '19:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
-            { id: 18, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '16:00', arr: '20:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
-            { id: 19, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '17:00', arr: '21:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
-            { id: 20, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '18:00', arr: '22:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
-            { id: 21, from: 'Mumbai', to: 'Pune', name: 'MSRTC Shivneri', type: 'Government', sub: 'Volvo 9400', dep: '19:00', arr: '23:45', price: 325, rate: 4.8, cat: 'comfort', status: 'ontime', am: ['ac', 'plug', 'cctv'] },
-            { id: 22, from: 'Mumbai', to: 'Pune', name: 'Neeta Travels', type: 'Private', sub: 'Luxury Coach', dep: '16:15', arr: '19:00', price: 400, rate: 4.0, cat: 'comfort', status: 'ontime', am: ['ac', 'water'] },
-            { id: 23, from: 'Mumbai', to: 'Pune', name: 'Neeta Travels', type: 'Private', sub: 'Sleeper', dep: '16:15', arr: '19:15', price: 550, rate: 4.1, cat: 'comfort', status: 'ontime', am: ['bed', 'ac'] },
-            { id: 24, from: 'Mumbai', to: 'Pune', name: 'Purple Metrolink', type: 'Private', sub: 'AC Seater', dep: '17:30', arr: '20:30', price: 375, rate: 4.2, cat: 'comfort', status: 'boarding', am: ['ac'] },
-            { id: 25, from: 'Mumbai', to: 'Pune', name: 'Purple Metrolink', type: 'Private', sub: 'Semi-Sleeper', dep: '17:30', arr: '20:45', price: 450, rate: 4.2, cat: 'comfort', status: 'boarding', am: ['ac', 'plug'] },
-
-            // Delhi -> Jaipur (High Frequency)
-            { id: 26, from: 'Delhi', to: 'Jaipur', name: 'RSRTC Goldline', type: 'Government', sub: 'Scania/Volvo', dep: '18:00', arr: '23:30', price: 700, rate: 4.5, cat: 'comfort', status: 'ontime', am: ['ac', 'plug'] },
-            { id: 27, from: 'Delhi', to: 'Jaipur', name: 'RSRTC Goldline', type: 'Government', sub: 'Sleeper', dep: '18:00', arr: '00:00', price: 900, rate: 4.5, cat: 'comfort', status: 'ontime', am: ['bed', 'ac'] },
-            { id: 28, from: 'Delhi', to: 'Jaipur', name: 'NueGo', type: 'Private', sub: 'Electric AC', dep: '19:00', arr: '00:15', price: 650, rate: 4.6, cat: 'comfort', status: 'boarding', am: ['wifi', 'ac'] },
-            { id: 29, from: 'Delhi', to: 'Jaipur', name: 'NueGo', type: 'Private', sub: 'Electric AC', dep: '20:00', arr: '01:15', price: 650, rate: 4.6, cat: 'comfort', status: 'ontime', am: ['wifi', 'ac'] },
-            { id: 30, from: 'Delhi', to: 'Jaipur', name: 'Zingbus', type: 'Private', sub: 'AC Multi-Axle', dep: '21:00', arr: '02:15', price: 600, rate: 4.3, cat: 'budget', status: 'ontime', am: ['wifi', 'ac'] },
-            { id: 31, from: 'Delhi', to: 'Jaipur', name: 'Zingbus', type: 'Private', sub: 'Sleeper', dep: '21:00', arr: '02:45', price: 800, rate: 4.3, cat: 'budget', status: 'ontime', am: ['bed', 'ac'] },
-            { id: 32, from: 'Delhi', to: 'Jaipur', name: 'Vikas Travels', type: 'Private', sub: 'Sleeper', dep: '22:00', arr: '04:00', price: 400, rate: 3.8, cat: 'budget', status: 'delayed', am: ['bed', 'ac'] },
-        ];
+        if (buses.length === 0) {
+            console.log("No results found in DB or no search performed.");
+        }
 
         const icons = {
             'wifi': '<i class="fas fa-wifi"></i>', 'ac': '<i class="fas fa-snowflake"></i>',

@@ -71,3 +71,11 @@ CREATE TABLE IF NOT EXISTS payments (
     payment_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS tickets (
+    ticket_id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_id INT,
+    qr_code_data TEXT,
+    generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (booking_id) REFERENCES bookings(booking_id)
+);

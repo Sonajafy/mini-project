@@ -1,4 +1,40 @@
-<!DOCTYPE html>
+<?php
+include 'includes/db.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $sql = "SELECT user_id, name, password, role FROM users WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        if (password_verify($password, $row['password'])) {
+            // Set Session Variables
+            $_SESSION['user_id'] = $row['user_id'];
+            $_SESSION['user_name'] = $row['name'];
+            $_SESSION['role'] = $row['role'];
+
+            // Redirect based on role
+            if ($row['role'] == 'ADMIN') {
+                header("Location: admin/dashboard.php");
+            } else {
+                header("Location: index.php");
+            }
+            exit();
+        } else {
+            $error = "Invalid password.";
+        }
+    } else {
+        $error = "No user found.";
+    }
+}
+?><
+
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -322,17 +358,17 @@
             <h3 class="fw-bold mb-1">Sign in</h3>
             <p class="text-muted mb-4">Please enter your details to continue.</p>
 
-            <form id="loginForm">
+            <form action="login.php" method="POST">
                 <!-- Email Input -->
                 <div class="form-group">
                     <label for="email" class="form-label text-muted small fw-semibold">EMAIL ADDRESS</label>
-                    <input type="email" class="form-control input-field" id="email" placeholder="name@example.com" required>
+                    <input type="email" name="email" class="form-control input-field" id="email" placeholder="name@example.com" required>
                 </div>
 
                 <!-- Password Input -->
                 <div class="form-group">
                     <label for="password" class="form-label text-muted small fw-semibold">PASSWORD</label>
-                    <input type="password" class="form-control input-field" id="password" placeholder="••••••••" required>
+                    <input type="password" name="password" class="form-control input-field" id="password" placeholder="••••••••" required>
                     <i class="fas fa-eye password-toggle" id="togglePassword"></i>
                 </div>
 

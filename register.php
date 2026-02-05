@@ -1,3 +1,24 @@
+<?php
+include 'includes/db.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Secure hashing
+
+    $sql = "INSERT INTO users (name, email, phone, password, role) VALUES (?, ?, ?, ?, 'USER')";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssss", $name, $email, $phone, $password);
+
+    if ($stmt->execute()) {
+        header("Location: login.php?success=1");
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -405,16 +426,16 @@
                 <p class="text-muted small">Start your journey with smarter travel.</p>
             </div>
 
-            <form id="registerForm">
+            <form action="register.php" method="POST">
                 <!-- Name Input -->
                 <div class="input-wrapper">
-                    <input type="text" class="form-control form-control-custom" placeholder="Full Name" required>
+                    <input type="text" name="name" class="form-control form-control-custom" placeholder="Full Name" required>
                     <i class="fas fa-user"></i>
                 </div>
 
                 <!-- Email Input -->
                 <div class="input-wrapper">
-                    <input type="email" class="form-control form-control-custom" placeholder="Email Address" required>
+                    <input type="email" name="email" class="form-control form-control-custom" placeholder="Email Address" required>
                     <i class="fas fa-envelope"></i>
                 </div>
 
@@ -436,7 +457,7 @@
 
                 <!-- Password Input -->
                 <div class="input-wrapper">
-                    <input type="password" class="form-control form-control-custom" placeholder="Password" required>
+                    <input type="password" name="password" class="form-control form-control-custom" placeholder="Password" required>
                     <i class="fas fa-lock"></i>
                 </div>
 
