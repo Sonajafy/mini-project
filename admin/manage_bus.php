@@ -19,6 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_bus'])) {
     $dep_time = $_POST['departure_time'];
     $arr_time = $_POST['arrival_time'];
 
+    // Prepared statement to prevent SQL Injection
     $sql = "INSERT INTO buses (bus_number, route_id, bus_type, total_seats, departure_time, arrival_time) 
             VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
@@ -33,17 +34,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_bus'])) {
 
 // B. Delete Bus Logic
 if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
+    $id = intval($_GET['delete']);
     $conn->query("DELETE FROM buses WHERE bus_id=$id");
-    header("Location: manage_bus.php"); // Refresh page
+    header("Location: manage_bus.php"); // Refresh page to show updated list
     exit();
 }
 
 // 3. Fetch Data for Display
-// Get all routes for the dropdown menu
+// Get all routes for the selection dropdown
 $routes = $conn->query("SELECT * FROM routes");
 
-// Get all buses to show in the table (Joined with Routes to show Source/Dest)
+// Get all buses joined with routes to show Source and Destination
 $buses = $conn->query("
     SELECT b.*, r.source, r.destination 
     FROM buses b 
@@ -59,139 +60,143 @@ $buses = $conn->query("
     <title>Manage Buses - SmartBus Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border: none; border-radius: 15px; }
+        .table thead { background-color: #212529; color: white; }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 
     <nav class="navbar navbar-dark bg-dark p-3">
         <div class="container-fluid">
-            <a class="navbar-brand" href="dashboard.php"><i class="fas fa-bus-alt me-2"></i>SmartBus Admin</a>
+            <a class="navbar-brand" href="dashboard.php">
+                <i class="fas fa-bus-alt me-2 text-danger"></i>SmartBus Admin
+            </a>
             <a href="../includes/logout.php" class="btn btn-outline-light btn-sm">Logout</a>
         </div>
     </nav>
 
     <div class="container mt-4">
-        
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-                <li class="breadcrumb-item active">Manage Buses</li>
-            </ol>
-        </nav>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-tools me-2 text-primary"></i>Manage Fleet</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Manage Buses</li>
+                </ol>
+            </nav>
+        </div>
 
         <?php echo $message; ?>
 
         <div class="row">
-            
-            <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Add New Bus</h5>
-                    </div>
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white fw-bold">Add New Bus</div>
                     <div class="card-body">
                         <form method="POST" action="manage_bus.php">
                             <div class="mb-3">
-                                <label class="form-label">Bus Number</label>
-                                <input type="text" name="bus_number" class="form-control" placeholder="e.g. KL-01-AB-1234" required>
+                                <label class="form-label small text-muted">Bus Number</label>
+                                <input type="text" name="bus_number" class="form-control" placeholder="e.g. KL-01-AX-9999" required>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Select Route</label>
+                                <label class="form-label small text-muted">Route Assignment</label>
                                 <select name="route_id" class="form-select" required>
-                                    <option value="">-- Choose Route --</option>
+                                    <option value="">-- Select Route --</option>
                                     <?php while($r = $routes->fetch_assoc()): ?>
                                         <option value="<?php echo $r['route_id']; ?>">
-                                            <?php echo $r['source'] . " ➔ " . $r['destination']; ?>
+                                            <?php echo htmlspecialchars($r['source'] . " ➔ " . $r['destination']); ?>
                                         </option>
                                     <?php endwhile; ?>
                                 </select>
-                                <div class="form-text"><a href="manage_route.php">Create new route?</a></div>
                             </div>
 
-                            <div class="row g-2">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Type</label>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small text-muted">Bus Type</label>
                                     <select name="bus_type" class="form-select">
                                         <option value="AC">AC</option>
                                         <option value="NON-AC">Non-AC</option>
                                         <option value="SLEEPER">Sleeper</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Seats</label>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small text-muted">Total Seats</label>
                                     <input type="number" name="total_seats" class="form-control" value="40" required>
                                 </div>
                             </div>
 
-                            <div class="row g-2">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Departure</label>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small text-muted">Departure Time</label>
                                     <input type="time" name="departure_time" class="form-control" required>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Arrival</label>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small text-muted">Arrival Time</label>
                                     <input type="time" name="arrival_time" class="form-control" required>
                                 </div>
                             </div>
 
-                            <button type="submit" name="add_bus" class="btn btn-primary w-100">Add Bus</button>
+                            <button type="submit" name="add_bus" class="btn btn-primary w-100">Add to Fleet</button>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-lg-8">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Existing Fleet</h5>
-                    </div>
+                    <div class="card-header bg-white fw-bold">Fleet Overview</div>
                     <div class="card-body p-0">
-                        <table class="table table-striped mb-0">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>Bus No</th>
-                                    <th>Route</th>
-                                    <th>Type</th>
-                                    <th>Time</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if ($buses->num_rows > 0): ?>
-                                    <?php while($row = $buses->fetch_assoc()): ?>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
                                     <tr>
-                                        <td class="fw-bold"><?php echo $row['bus_number']; ?></td>
-                                        <td>
-                                            <?php echo $row['source']; ?> <i class="fas fa-arrow-right small text-muted"></i> <?php echo $row['destination']; ?>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info text-dark"><?php echo $row['bus_type']; ?></span>
-                                        </td>
-                                        <td>
-                                            <?php echo substr($row['departure_time'], 0, 5); ?> - 
-                                            <?php echo substr($row['arrival_time'], 0, 5); ?>
-                                        </td>
-                                        <td>
-                                            <a href="manage_bus.php?delete=<?php echo $row['bus_id']; ?>" 
-                                               class="btn btn-danger btn-sm" 
-                                               onclick="return confirm('Are you sure you want to delete this bus?');">
-                                               <i class="fas fa-trash"></i>
-                                            </a>
-                                        </td>
+                                        <th>Bus No.</th>
+                                        <th>Route</th>
+                                        <th>Type</th>
+                                        <th>Seats</th>
+                                        <th>Schedule</th>
+                                        <th>Action</th>
                                     </tr>
-                                    <?php endwhile; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center py-4 text-muted">No buses found. Add one on the left!</td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <?php if ($buses->num_rows > 0): ?>
+                                        <?php while($row = $buses->fetch_assoc()): ?>
+                                        <tr>
+                                            <td class="fw-bold"><?php echo htmlspecialchars($row['bus_number']); ?></td>
+                                            <td>
+                                                <small class="text-muted d-block"><?php echo htmlspecialchars($row['source']); ?></small>
+                                                <i class="fas fa-long-arrow-alt-down text-primary" style="font-size: 0.7rem;"></i>
+                                                <small class="text-muted d-block"><?php echo htmlspecialchars($row['destination']); ?></small>
+                                            </td>
+                                            <td><span class="badge bg-secondary"><?php echo $row['bus_type']; ?></span></td>
+                                            <td><?php echo $row['total_seats']; ?></td>
+                                            <td>
+                                                <small><?php echo substr($row['departure_time'], 0, 5); ?> - <?php echo substr($row['arrival_time'], 0, 5); ?></small>
+                                            </td>
+                                            <td>
+                                                <a href="manage_bus.php?delete=<?php echo $row['bus_id']; ?>" 
+                                                   class="btn btn-outline-danger btn-sm" 
+                                                   onclick="return confirm('Delete this bus and all associated seat records?');">
+                                                   <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php endwhile; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="6" class="text-center py-4 text-muted">No buses available.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-
 </body>
 </html>
